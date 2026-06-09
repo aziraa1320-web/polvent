@@ -13,52 +13,52 @@
             background: white;
         }
         .form-input:focus {
-            border-color: #0056B3;
-            box-shadow: 0 0 0 3px rgba(0,86,179,0.1);
+            border-color: #1e293b;
+            box-shadow: 0 0 0 3px rgba(30,41,59,0.1);
         }
         .form-input.error { border-color: #dc2626; }
         .form-error { color: #dc2626; font-size: 0.78rem; margin-top: 0.3rem; }
         .form-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
         .remember-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #374151; cursor: pointer; }
-        .remember-label input { accent-color: #0056B3; width: 15px; height: 15px; }
-        .forgot-link { font-size: 0.82rem; color: #0056B3; text-decoration: none; font-weight: 500; }
-        .forgot-link:hover { text-decoration: underline; }
+        .remember-label input { accent-color: #1e293b; width: 15px; height: 15px; }
         .btn-login {
             width: 100%; padding: 0.8rem;
-            background: #0056B3; color: white;
+            background: #1e293b; color: white;
             border: none; border-radius: 0.625rem;
             font-size: 0.95rem; font-weight: 700;
             cursor: pointer; transition: all 0.2s;
             display: flex; align-items: center; justify-content: center; gap: 0.5rem;
         }
-        .btn-login:hover { background: #003d80; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,86,179,0.3); }
-        .form-divider { text-align: center; margin: 1.25rem 0; color: #94a3b8; font-size: 0.82rem; }
-        .register-link { text-align: center; font-size: 0.875rem; color: #64748b; }
-        .register-link a { color: #0056B3; font-weight: 600; text-decoration: none; }
-        .register-link a:hover { text-decoration: underline; }
+        .btn-login:hover { background: #0f172a; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(15,23,42,0.3); }
         .status-alert {
             background: #d1fae5; border: 1px solid #a7f3d0;
             color: #065f46; padding: 0.75rem 1rem;
             border-radius: 0.5rem; font-size: 0.875rem;
             margin-bottom: 1.25rem;
         }
+        .badge {
+            display: inline-block; padding: 0.2rem 0.5rem; background: #fee2e2; color: #991b1b;
+            border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 1rem;
+            border: 1px solid #fca5a5;
+        }
     </style>
 
-    <div class="form-title">Portal Mahasiswa 👋</div>
-    <div class="form-sub">Masuk untuk mendaftar event kampus, khusus mahasiswa POLBENG</div>
+    <div class="badge">RESTRICTED AREA</div>
+    <div class="form-title">Portal Administrator 🛡️</div>
+    <div class="form-sub">Autentikasi tingkat tinggi untuk akses manajemen utama.</div>
 
     @if(session('status'))
         <div class="status-alert">{{ session('status') }}</div>
     @endif
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('admin.login') }}">
         @csrf
 
         <div class="form-group">
-            <label class="form-label" for="email">Alamat Email</label>
+            <label class="form-label" for="email">Admin Email ID</label>
             <input id="email" class="form-input {{ $errors->has('email') ? 'error' : '' }}"
                 type="email" name="email" value="{{ old('email') }}"
-                placeholder="mahasiswa@polbeng.ac.id"
+                placeholder="admin@polbeng.ac.id"
                 required autofocus autocomplete="username">
             @error('email')
                 <div class="form-error">{{ $message }}</div>
@@ -66,7 +66,7 @@
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="password">Kata Sandi</label>
+            <label class="form-label" for="password">Security Passphrase</label>
             <input id="password" class="form-input {{ $errors->has('password') ? 'error' : '' }}"
                 type="password" name="password"
                 placeholder="••••••••"
@@ -79,28 +79,15 @@
         <div class="form-row">
             <label class="remember-label">
                 <input type="checkbox" name="remember" id="remember_me">
-                Ingat saya
+                Ingat Sesi
             </label>
-            @if (Route::has('password.request'))
-                <a class="forgot-link" href="{{ route('password.request') }}">Lupa kata sandi?</a>
-            @endif
         </div>
 
         <button type="submit" class="btn-login" id="btn-login">
             <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
             </svg>
-            Masuk ke POLVENT
+            Otorisasi Masuk
         </button>
     </form>
-
-    <div class="form-divider">— atau —</div>
-    <div class="register-link">
-        Belum punya akun? <a href="{{ route('register') }}" id="link-daftar">Daftar sebagai Mahasiswa</a>
-    </div>
-    <div style="margin-top:1.5rem;text-align:center;">
-        <a href="{{ route('home') }}" style="font-size:0.8rem;color:#94a3b8;text-decoration:none;">
-            ← Kembali ke Beranda
-        </a>
-    </div>
 </x-guest-layout>

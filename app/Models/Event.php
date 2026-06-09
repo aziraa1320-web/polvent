@@ -19,6 +19,7 @@ class Event extends Model
         'quota',
         'poster',
         'created_by',
+        'id_panitia',
     ];
 
     /**
@@ -30,11 +31,19 @@ class Event extends Model
     ];
 
     /**
-     * Relation: creator (admin user).
+     * Relation: creator (admin user who originally created).
      */
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Relation: panitia who owns/manages this event.
+     */
+    public function panitia()
+    {
+        return $this->belongsTo(User::class, 'id_panitia');
     }
 
     /**
@@ -62,6 +71,16 @@ class Event extends Model
     }
 
     /**
+     * Get fill percentage for quota progress bar.
+     */
+    public function getQuotaPercentageAttribute(): int
+    {
+        if ($this->quota === 0) return 0;
+        $approved = $this->approvedRegistrations()->count();
+        return min(100, (int) round(($approved / $this->quota) * 100));
+    }
+
+    /**
      * Check if event still has available quota.
      */
     public function hasQuota(): bool
@@ -75,5 +94,13 @@ class Event extends Model
     public function scopeUpcoming($query)
     {
         return $query->where('event_date', '>=', now())->orderBy('event_date');
+    }
+
+    /**
+     * Scope: events owned by a specific panitia.
+     */
+    public function scopeOwnedBy($query, int $userId)
+    {
+        return $query->where('id_panitia', $userId);
     }
 }

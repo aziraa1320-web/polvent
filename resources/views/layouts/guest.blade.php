@@ -1,30 +1,152 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ config('app.name', 'POLVENT') }} — Platform Event Polbeng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        * { font-family: 'Inter', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f0f4f8; min-height: 100vh; display: flex; }
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        .auth-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+            width: 100%;
+        }
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        /* Left Panel */
+        .auth-left {
+            background: linear-gradient(145deg, #0056B3 0%, #003d80 55%, #001f4d 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .auth-left::before {
+            content: '';
+            position: absolute;
+            width: 400px; height: 400px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+            top: -100px; left: -100px;
+        }
+        .auth-left::after {
+            content: '';
+            position: absolute;
+            width: 300px; height: 300px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+            bottom: -80px; right: -80px;
+        }
+        .auth-left-content { position: relative; z-index: 1; text-align: center; max-width: 360px; }
+        .auth-brand-logo {
+            width: 72px; height: 72px;
+            background: white;
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .auth-brand-logo img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+        .auth-brand-name {
+            font-size: 2rem; font-weight: 900; color: white;
+            letter-spacing: 0.1em; margin-bottom: 0.25rem;
+        }
+        .auth-brand-sub {
+            font-size: 0.85rem; color: rgba(255,255,255,0.7);
+            font-weight: 400; margin-bottom: 2.5rem;
+        }
+        .auth-features { display: flex; flex-direction: column; gap: 1rem; text-align: left; }
+        .auth-feature-item {
+            display: flex; align-items: center; gap: 0.875rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 0.75rem;
+            padding: 0.875rem 1rem;
+        }
+        .auth-feature-icon {
+            width: 38px; height: 38px; flex-shrink: 0;
+            background: rgba(255,255,255,0.15);
+            border-radius: 0.5rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+        }
+        .auth-feature-text .title { font-size: 0.875rem; font-weight: 600; color: white; }
+        .auth-feature-text .sub { font-size: 0.75rem; color: rgba(255,255,255,0.65); margin-top: 0.1rem; }
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
+        /* Right Panel */
+        .auth-right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+        .auth-form-container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .auth-wrapper { grid-template-columns: 1fr; }
+            .auth-left { display: none; }
+            .auth-right { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-wrapper">
+        <!-- Left branding panel -->
+        <div class="auth-left">
+            <div class="auth-left-content">
+                <div class="auth-brand-logo">
+                    <img src="{{ asset('images/logo.png') }}" alt="Polbeng Logo">
+                </div>
+                <div class="auth-brand-name">POLVENT</div>
+                <div class="auth-brand-sub">Platform Manajemen Event<br>Politeknik Negeri Bengkalis</div>
+
+                <div class="auth-features">
+                    <div class="auth-feature-item">
+                        <div class="auth-feature-icon">🎓</div>
+                        <div class="auth-feature-text">
+                            <div class="title">Event Kampus Resmi</div>
+                            <div class="sub">Semua event dikelola panitia terverifikasi</div>
+                        </div>
+                    </div>
+                    <div class="auth-feature-item">
+                        <div class="auth-feature-icon">⚡</div>
+                        <div class="auth-feature-text">
+                            <div class="title">Pendaftaran Mudah</div>
+                            <div class="sub">Daftar event dalam hitungan detik</div>
+                        </div>
+                    </div>
+                    <div class="auth-feature-item">
+                        <div class="auth-feature-icon">🔒</div>
+                        <div class="auth-feature-text">
+                            <div class="title">Data Aman</div>
+                            <div class="sub">Proteksi CSRF, XSS & enkripsi password</div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+        <!-- Right form panel -->
+        <div class="auth-right">
+            <div class="auth-form-container">
                 {{ $slot }}
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>

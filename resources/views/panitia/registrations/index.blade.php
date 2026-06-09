@@ -1,0 +1,101 @@
+@extends('layouts.app')
+
+@section('title', 'Kelola Peserta')
+@section('page-title', 'Kelola Peserta')
+@section('page-breadcrumb', 'Panitia / <span>Registrasi</span>')
+
+@section('content')
+
+<div class="page-header">
+    <h1>Kelola Pendaftaran Mahasiswa</h1>
+    <p>Verifikasi mahasiswa yang mendaftar ke event-event yang Anda buat</p>
+</div>
+
+<div class="table-wrapper">
+    <div class="table-header">
+        <h3>👥 Semua Pendaftaran Event Saya</h3>
+        
+        <form method="GET" action="{{ route('panitia.registrations.index') }}" style="display:flex;gap:0.5rem;align-items:center;">
+            <select name="status" class="form-input" style="padding:0.4rem 0.75rem;width:auto;" onchange="this.form.submit()">
+                <option value="">Semua Status</option>
+                <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Menunggu Verifikasi</option>
+                <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Disetujui</option>
+                <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Ditolak</option>
+            </select>
+        </form>
+    </div>
+
+    @if($registrations->count())
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Mahasiswa</th>
+                    <th>Event</th>
+                    <th>Waktu Daftar</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($registrations as $reg)
+                    <tr>
+                        <td style="color:#94a3b8;">{{ $loop->iteration + ($registrations->currentPage() - 1) * $registrations->perPage() }}</td>
+                        <td>
+                            <div style="font-weight:600;color:#1e293b;">{{ $reg->user->name }}</div>
+                            @if($reg->user->nim)
+                                <div style="font-size:0.75rem;color:#64748b;">NIM: {{ $reg->user->nim }}</div>
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('panitia.events.show', $reg->event) }}" style="font-weight:500;color:#1d4ed8;text-decoration:none;">{{ $reg->event->title }}</a>
+                            <div style="font-size:0.75rem;color:#64748b;">Kuota: {{ $reg->event->approved_registrations_count }}/{{ $reg->event->quota }}</div>
+                        </td>
+                        <td style="font-size:0.82rem;color:#64748b;">
+                            {{ $reg->created_at->format('d M Y') }}<br>
+                            <span style="font-size:0.72rem;">{{ $reg->created_at->format('H:i') }} WIB</span>
+                        </td>
+                        <td>
+                            <span class="status-badge status-{{ $reg->status }}">
+                                {{ $reg->status === 'pending' ? 'Menunggu' : ($reg->status === 'approved' ? 'Disetujui' : 'Ditolak') }}
+                            </span>
+                        </td>
+                        <td>
+                            @if($reg->status === 'pending')
+                                <div style="display:flex;gap:0.4rem;">
+                                    <form method="POST" action="{{ route('panitia.registrations.approve', $reg) }}">
+                                        @csrf @method('PATCH')
+                                        <button type="submit" class="btn btn-success btn-sm" title="Setujui">✓ Setuju</button>
+                                    </form>
+                                    <form method="POST" action="{{ route('panitia.registrations.reject', $reg) }}">
+                                        @csrf @method('PATCH')
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Tolak">✗ Tolak</button>
+                                    </form>
+                                </div>
+                            @else
+                                <span style="font-size:0.78rem;color:#94a3b8;">Selesai diproses</span>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <div style="padding:1rem 1.5rem;border-top:1px solid #f1f5f9;">
+            {{ $registrations->links() }}
+        </div>
+    @else
+        <div class="empty-state" style="padding:4rem;">
+            <div class="empty-state-icon">👥</div>
+            <h3>Tidak ada data</h3>
+            @if(request('status'))
+                <p>Belum ada pendaftaran dengan status "{{ request('status') }}"</p>
+                <a href="{{ route('panitia.registrations.index') }}" class="btn btn-secondary btn-sm" style="margin-top:1rem;">Reset Filter</a>
+            @else
+                <p>Belum ada mahasiswa yang mendaftar ke event-event Anda.</p>
+            @endif
+        </div>
+    @endif
+</div>
+
+@endsection

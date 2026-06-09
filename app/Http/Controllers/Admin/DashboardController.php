@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Registration;
 use App\Models\User;
+use App\Models\ActivityLog;
 
 class DashboardController extends Controller
 {
@@ -23,11 +24,11 @@ class DashboardController extends Controller
             'total_panitia'       => User::where('role', 'panitia')->count(),
         ];
 
-        $recentEvents = Event::with('creator')
+        $recentActivities = ActivityLog::with('user')
             ->latest()
             ->limit(5)
             ->get();
 
-        return view('admin.dashboard', compact('stats', 'recentEvents'));
+        return view('admin.dashboard', compact('stats', 'recentActivities'));
     }
 }

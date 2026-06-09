@@ -6,8 +6,8 @@ use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboardController;
 use App\Http\Controllers\Mahasiswa\EventController as MahasiswaEventController;
 use App\Http\Controllers\Panitia\DashboardController as PanitiaDashboardController;
+use App\Http\Controllers\Panitia\EventController as PanitiaEventController;
 use App\Http\Controllers\Panitia\RegistrationController;
-use App\Services\ActivityLogger;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -84,7 +84,10 @@ Route::middleware(['auth', 'checkRole:panitia'])
         Route::get('/dashboard', [PanitiaDashboardController::class, 'index'])
             ->name('dashboard');
 
-        // Registrations management
+        // Event CRUD (only owned events)
+        Route::resource('events', PanitiaEventController::class);
+
+        // Registrations management (approve/reject)
         Route::get('/registrations', [RegistrationController::class, 'index'])
             ->name('registrations.index');
 

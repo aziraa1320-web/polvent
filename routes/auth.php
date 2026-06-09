@@ -22,6 +22,16 @@ Route::middleware('guest')->group(function () {
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
+    Route::get('portal-admin', [AuthenticatedSessionController::class, 'createAdmin'])
+        ->name('admin.login');
+
+    Route::post('portal-admin', [AuthenticatedSessionController::class, 'storeAdmin']);
+
+    Route::get('portal-panitia', [AuthenticatedSessionController::class, 'createPanitia'])
+        ->name('panitia.login');
+
+    Route::post('portal-panitia', [AuthenticatedSessionController::class, 'storePanitia']);
+
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');
 
