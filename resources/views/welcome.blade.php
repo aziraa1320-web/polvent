@@ -44,6 +44,7 @@
             padding: 4px; height: 44px;
         }
         .navbar-logo img { height: 100%; width: auto; object-fit: contain; }
+        .navbar-logo img.logo-polvent { height: 200%; width: auto; }
         
         .navbar-links { display: flex; gap: 2.5rem; }
         .navbar-links a { color: var(--text-main); font-size: 0.9rem; font-weight: 600; transition: color 0.2s; }
@@ -193,15 +194,15 @@
         .feat-item p { color: #94a3b8; font-size: 0.95rem; line-height: 1.6; }
 
         /* ======= FOOTER ======= */
-        footer { background: #020617; color: #94a3b8; padding: 5rem 2rem 2rem; }
+        footer { background: #ffffff; color: #64748b; padding: 5rem 2rem 2rem; border-top: 1px solid #e2e8f0; }
         .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; margin-bottom: 4rem; }
-        .footer-brand h2 { color: white; font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: 'Outfit'; }
-        .footer-brand p { font-size: 0.95rem; line-height: 1.6; max-width: 350px; }
-        .footer-title { color: white; font-weight: 700; font-family: 'Outfit'; font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .footer-brand h2 { color: var(--navy); font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: 'Outfit'; }
+        .footer-brand p { font-size: 0.95rem; line-height: 1.6; max-width: 350px; color: #64748b; }
+        .footer-title { color: var(--navy); font-weight: 700; font-family: 'Outfit'; font-size: 1.1rem; margin-bottom: 1.5rem; }
         .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
-        .footer-links a { color: #94a3b8; transition: color 0.2s; font-size: 0.9rem; }
-        .footer-links a:hover { color: white; }
-        .footer-bottom { max-width: 1200px; margin: 0 auto; text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.85rem; }
+        .footer-links a { color: #64748b; transition: color 0.2s; font-size: 0.9rem; }
+        .footer-links a:hover { color: var(--blue); }
+        .footer-bottom { max-width: 1200px; margin: 0 auto; text-align: center; padding-top: 2rem; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #94a3b8; }
 
         /* ======= RESPONSIVE ======= */
         @media (max-width: 1024px) {
@@ -232,7 +233,7 @@
             <div class="navbar-logo">
                 <!-- Gunakan dua logo berdampingan -->
                 <img src="{{ asset('images/logo-polbeng.png') }}" alt="Polbeng Logo">
-                <img src="{{ asset('images/logo-polvent.png') }}" alt="Polvent Logo">
+                <img src="{{ asset('images/logo-polvent.png') }}" alt="Polvent Logo" class="logo-polvent">
             </div>
             <!-- Teks POLVENT dihapus sesuai permintaan -->
         </a>
@@ -430,7 +431,7 @@
             <div class="footer-brand">
                 <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;height:48px;">
                     <img src="{{ asset('images/logo-polbeng.png') }}" alt="Polbeng" style="height:100%;width:auto;object-fit:contain;">
-                    <img src="{{ asset('images/logo-polvent.png') }}" alt="Polvent" style="height:100%;width:auto;object-fit:contain;">
+                    <img src="{{ asset('images/logo-polvent.png') }}" alt="Polvent" style="height:200%;width:auto;object-fit:contain;">
                 </div>
                 <p>Pusat informasi dan pendaftaran event kampus Politeknik Negeri Bengkalis terintegrasi. Mudah, cepat, dan aman.</p>
             </div>

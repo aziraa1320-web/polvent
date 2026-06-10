@@ -48,15 +48,11 @@
         }
         .auth-left-content { position: relative; z-index: 1; text-align: center; max-width: 360px; }
         .auth-brand-logo {
-            width: 72px; height: 72px;
-            background: white;
-            border-radius: 18px;
             display: flex; align-items: center; justify-content: center;
             margin: 0 auto 1.5rem;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-            overflow: hidden;
+            height: 110px;
         }
-        .auth-brand-logo img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+        .auth-brand-logo img.logo-polbeng { height: 100%; width: auto; object-fit: contain; }
         .auth-brand-name {
             font-size: 2rem; font-weight: 900; color: white;
             letter-spacing: 0.1em; margin-bottom: 0.25rem;
@@ -110,7 +106,7 @@
         <div class="auth-left">
             <div class="auth-left-content">
                 <div class="auth-brand-logo">
-                    <img src="{{ asset('images/logo.png') }}" alt="Polbeng Logo">
+                    <img src="{{ asset('images/logo-polbeng.png') }}" alt="Polbeng Logo" class="logo-polbeng">
                 </div>
                 <div class="auth-brand-name">POLVENT</div>
                 <div class="auth-brand-sub">Platform Manajemen Event<br>Politeknik Negeri Bengkalis</div>
