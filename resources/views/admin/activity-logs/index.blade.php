@@ -2,7 +2,9 @@
 
 @section('title', 'Activity Logs')
 @section('page-title', 'Activity Logs')
-@section('page-breadcrumb', 'Admin / <span>Activity Logs</span>')
+@section('page-breadcrumb')
+    Admin / <span>Activity Logs</span>
+@endsection
 
 @section('content')
 

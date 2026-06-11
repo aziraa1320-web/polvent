@@ -2,7 +2,9 @@
 
 @section('title', 'Daftar Event')
 @section('page-title', 'Daftar Event')
-@section('page-breadcrumb', 'Mahasiswa / <span>Event</span>')
+@section('page-breadcrumb')
+    Mahasiswa / <span>Event</span>
+@endsection
 
 @section('content')
 

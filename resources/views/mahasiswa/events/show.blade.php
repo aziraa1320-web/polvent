@@ -2,7 +2,9 @@
 
 @section('title', $event->title)
 @section('page-title', 'Detail Event')
-@section('page-breadcrumb', '<a href="' . route('mahasiswa.events.index') . '" style="color:#94a3b8;">Event</a> / <span>' . e($event->title) . '</span>')
+@section('page-breadcrumb')
+    <a href="{{ route('mahasiswa.events.index') }}" style="color:#94a3b8;">Event</a> / <span>{{ $event->title }}</span>
+@endsection
 
 @section('content')
 

@@ -2,7 +2,9 @@
 
 @section('title', $event->title)
 @section('page-title', 'Detail Event (Admin)')
-@section('page-breadcrumb', '<a href="' . route('admin.events.index') . '" style="color:#94a3b8;">Event</a> / <span>Detail</span>')
+@section('page-breadcrumb')
+    <a href="{{ route('admin.events.index') }}" style="color:#94a3b8;">Event</a> / <span>Detail</span>
+@endsection
 
 @section('content')
 

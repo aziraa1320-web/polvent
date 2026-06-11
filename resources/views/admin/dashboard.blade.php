@@ -2,7 +2,9 @@
 
 @section('title', 'Dashboard Admin')
 @section('page-title', 'Dashboard Admin')
-@section('page-breadcrumb', 'Admin / <span>Dashboard</span>')
+@section('page-breadcrumb')
+    Admin / <span>Dashboard</span>
+@endsection
 
 @section('content')
 

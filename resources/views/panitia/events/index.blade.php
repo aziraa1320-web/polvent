@@ -2,7 +2,9 @@
 
 @section('title', 'Event Saya')
 @section('page-title', 'Event Saya')
-@section('page-breadcrumb', 'Panitia / <span>Event</span>')
+@section('page-breadcrumb')
+    Panitia / <span>Event</span>
+@endsection
 
 @section('content')
 

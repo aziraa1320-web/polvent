@@ -2,7 +2,9 @@
 
 @section('title', 'Dashboard Mahasiswa')
 @section('page-title', 'Dashboard')
-@section('page-breadcrumb', 'Mahasiswa / <span>Dashboard</span>')
+@section('page-breadcrumb')
+    Mahasiswa / <span>Dashboard</span>
+@endsection
 
 @section('content')
 

@@ -2,7 +2,9 @@
 
 @section('title', 'Dashboard Panitia')
 @section('page-title', 'Dashboard Panitia')
-@section('page-breadcrumb', 'Panitia / <span>Dashboard</span>')
+@section('page-breadcrumb')
+    Panitia / <span>Dashboard</span>
+@endsection
 
 @section('content')
 

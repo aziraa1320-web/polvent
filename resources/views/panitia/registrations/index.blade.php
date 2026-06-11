@@ -2,7 +2,9 @@
 
 @section('title', 'Kelola Peserta')
 @section('page-title', 'Kelola Peserta')
-@section('page-breadcrumb', 'Panitia / <span>Registrasi</span>')
+@section('page-breadcrumb')
+    Panitia / <span>Registrasi</span>
+@endsection
 
 @section('content')
 

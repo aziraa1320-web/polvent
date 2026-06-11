@@ -2,7 +2,9 @@
 
 @section('title', 'Semua Event')
 @section('page-title', 'Kelola Event')
-@section('page-breadcrumb', 'Admin / <span>Event</span>')
+@section('page-breadcrumb')
+    Admin / <span>Event</span>
+@endsection
 
 @section('content')
 

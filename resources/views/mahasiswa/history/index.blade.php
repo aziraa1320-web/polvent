@@ -2,7 +2,9 @@
 
 @section('title', 'Riwayat Pendaftaran')
 @section('page-title', 'Riwayat Pendaftaran')
-@section('page-breadcrumb', 'Mahasiswa / <span>Riwayat</span>')
+@section('page-breadcrumb')
+    Mahasiswa / <span>Riwayat</span>
+@endsection
 
 @section('content')
 

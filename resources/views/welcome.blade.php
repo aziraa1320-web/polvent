@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="POLVENT - Platform resmi manajemen event kampus Politeknik Negeri Bengkalis.">
     <title>POLVENT — Portal Event Politeknik Negeri Bengkalis</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -222,6 +223,8 @@
             .stat-box::after { display: none; }
             .feat-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            #about > div { grid-template-columns: 1fr !important; gap: 2rem !important; }
+            #about img { display: none; } /* Hide the big logo on small screens to save space */
         }
     </style>
 </head>
@@ -242,6 +245,7 @@
             <a href="{{ route('home') }}">Beranda</a>
             <a href="#events">Daftar Event</a>
             <a href="#features">Keunggulan</a>
+            <a href="#about">Tentang Kami</a>
         </div>
 
         <div class="navbar-auth">
@@ -391,7 +395,7 @@
         </div>
     </section>
 
-    <!-- FEATURES -->
+    <!-- FEATURES / KEUNGGULAN -->
     <section class="features-wrap" id="features">
         <div class="section-padding" style="padding-top:0;padding-bottom:0;">
             <div style="text-align:center;max-width:700px;margin:0 auto;">
@@ -421,6 +425,37 @@
                     <h3>Privasi & Keamanan</h3>
                     <p>Data pribadi mahasiswa dilindungi secara ketat. Tidak ada data yang dibagikan tanpa izin, semua aktivitas tercatat aman di Log Sistem.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT US / TENTANG KAMI -->
+    <section class="section-padding" id="about" style="background: white; border-top: 1px solid #f1f5f9; padding-bottom: 6rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1100px; margin: 0 auto;">
+            <div>
+                <h2 class="section-title">Tentang POLVENT</h2>
+                <div style="width: 60px; height: 5px; background: var(--blue); border-radius: 4px; margin-bottom: 1.5rem;"></div>
+                <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; margin-bottom: 1.5rem;">
+                    POLVENT (Politeknik Event) adalah platform manajemen event resmi yang dikembangkan untuk memfasilitasi seluruh kegiatan mahasiswa di lingkungan Politeknik Negeri Bengkalis.
+                </p>
+                <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.7;">
+                    Kami hadir untuk menjembatani antara panitia penyelenggara dan peserta event, memastikan alur informasi kegiatan kampus tersampaikan secara efektif, efisien, dan transparan.
+                </p>
+                <div style="margin-top: 2.5rem; display: flex; gap: 1.5rem;">
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0; flex: 1;">
+                        <h4 style="color: var(--navy); font-weight: 800; font-family: 'Outfit'; margin-bottom: 0.5rem; font-size: 1.1rem;">Visi Kami</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">Mendigitalisasi dan mempermudah administrasi seluruh kegiatan kemahasiswaan.</p>
+                    </div>
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0; flex: 1;">
+                        <h4 style="color: var(--navy); font-weight: 800; font-family: 'Outfit'; margin-bottom: 0.5rem; font-size: 1.1rem;">Misi Kami</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">Menyediakan platform yang aman, real-time, dan mudah diakses semua mahasiswa.</p>
+                    </div>
+                </div>
+            </div>
+            <div style="position: relative; display: flex; justify-content: center; align-items: center; padding: 2rem;">
+                <div style="position: absolute; top: 0; right: 20px; width: 120px; height: 120px; background: var(--blue); opacity: 0.08; border-radius: 50%;"></div>
+                <div style="position: absolute; bottom: 0; left: 20px; width: 180px; height: 180px; background: var(--navy); opacity: 0.05; border-radius: 50%;"></div>
+                <img src="{{ asset('images/logo-polvent.png') }}" alt="Tentang POLVENT" style="width: 100%; max-width: 320px; display: block; filter: drop-shadow(0 20px 30px rgba(15, 40, 92, 0.15)); position: relative; z-index: 2;">
             </div>
         </div>
     </section>
