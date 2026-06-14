@@ -11,7 +11,16 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Auth\GoogleController;
+
 Route::middleware('guest')->group(function () {
+    // Google Authentication Routes
+    Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])
+        ->name('login.google');
+    Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])
+        ->name('login.google.callback');
+
+
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
@@ -31,6 +40,14 @@ Route::middleware('guest')->group(function () {
         ->name('panitia.login');
 
     Route::post('portal-panitia', [AuthenticatedSessionController::class, 'storePanitia']);
+
+    Route::post('otp/request', [\App\Http\Controllers\Auth\OtpController::class, 'requestOtp'])
+        ->name('otp.request');
+    Route::get('otp/verify', [\App\Http\Controllers\Auth\OtpController::class, 'show'])
+        ->name('otp.verify');
+    Route::post('otp/verify', [\App\Http\Controllers\Auth\OtpController::class, 'verify']);
+    Route::post('otp/resend', [\App\Http\Controllers\Auth\OtpController::class, 'resend'])
+        ->name('otp.resend');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');

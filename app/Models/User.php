@@ -19,6 +19,8 @@ class User extends Authenticatable
         'password',
         'role',
         'nim',
+        'otp_code',
+        'otp_expires_at',
     ];
 
     /**
@@ -37,6 +39,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
+            'otp_expires_at'    => 'datetime',
         ];
     }
 
@@ -94,5 +97,28 @@ class User extends Authenticatable
     public function activityLogs()
     {
         return $this->hasMany(ActivityLog::class);
+    }
+
+    /**
+     * Generate a new 6-digit OTP code and save it.
+     */
+    public function generateOtp(): string
+    {
+        $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        
+        $this->update([
+            'otp_code' => $code,
+            'otp_expires_at' => now()->addMinutes(10),
+        ]);
+
+        return $code;
+    }
+
+    /**
+     * Send OTP via email.
+     */
+    public function sendOtpMail(): void
+    {
+        \Illuminate\Support\Facades\Mail::to($this->email)->send(new \App\Mail\OtpMail($this->otp_code));
     }
 }

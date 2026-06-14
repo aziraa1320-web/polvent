@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\LoginHistoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboardController;
@@ -68,6 +69,10 @@ Route::middleware(['auth', 'checkRole:admin'])
         // Activity Logs
         Route::get('/activity-logs', [ActivityLogController::class, 'index'])
             ->name('activity-logs.index');
+
+        // Login History
+        Route::get('/login-history', [LoginHistoryController::class, 'index'])
+            ->name('login-history.index');
     });
 
 /*

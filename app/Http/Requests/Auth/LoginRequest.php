@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\LoginHistory;
+use App\Models\User;
 
 class LoginRequest extends FormRequest
 {
@@ -30,20 +32,44 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
+            'g-recaptcha-response' => ['required', 'string'],
         ];
     }
 
     /**
-     * Attempt to authenticate the request's credentials.
+     * Authenticate the request's credentials and return the user.
      *
      * @throws ValidationException
      */
-    public function authenticate(): void
+    public function authenticate(): \App\Models\User
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        // Mock reCAPTCHA validation (simulating standard security)
+        if ($this->input('g-recaptcha-response') !== 'verified') {
             RateLimiter::hit($this->throttleKey());
+            
+            LoginHistory::create([
+                'email' => $this->input('email'),
+                'ip_address' => $this->ip(),
+                'user_agent' => $this->userAgent(),
+                'status' => 'failed',
+            ]);
+
+            throw ValidationException::withMessages([
+                'g-recaptcha-response' => 'Verifikasi keamanan gagal.',
+            ]);
+        }
+
+        if (! Auth::validate($this->only('email', 'password'))) {
+            RateLimiter::hit($this->throttleKey());
+
+            LoginHistory::create([
+                'email' => $this->input('email'),
+                'ip_address' => $this->ip(),
+                'user_agent' => $this->userAgent(),
+                'status' => 'failed',
+            ]);
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
@@ -51,6 +77,8 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
+
+        return User::where('email', $this->input('email'))->first();
     }
 
     /**

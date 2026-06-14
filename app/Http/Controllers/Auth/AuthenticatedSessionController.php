@@ -11,11 +11,20 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+    private function generateCaptcha()
+    {
+        $num1 = rand(1, 9);
+        $num2 = rand(1, 9);
+        session(['captcha_answer' => $num1 + $num2]);
+        session(['captcha_question' => "$num1 + $num2"]);
+    }
+
     /**
      * Display the login view.
      */
     public function create(): View
     {
+        $this->generateCaptcha();
         return view('auth.login');
     }
 
@@ -24,6 +33,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function createAdmin(): View
     {
+        $this->generateCaptcha();
         return view('auth.login-admin');
     }
 
@@ -32,6 +42,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function createPanitia(): View
     {
+        $this->generateCaptcha();
         return view('auth.login-panitia');
     }
 
@@ -40,20 +51,25 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $user = $request->authenticate();
 
-        if (Auth::user()->role !== 'mahasiswa') {
-            Auth::guard('web')->logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
+        if ($user->role !== 'mahasiswa') {
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'email' => 'Akun ini tidak memiliki akses ke portal login Mahasiswa.',
             ]);
         }
 
-        $request->session()->regenerate();
+        // Generate and send OTP
+        $user->generateOtp();
+        $user->sendOtpMail();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        session([
+            'otp_user_id' => $user->id,
+            'otp_role' => $user->role,
+            'otp_remember' => $request->boolean('remember'),
+        ]);
+
+        return redirect()->route('otp.verify');
     }
 
     /**
@@ -61,20 +77,25 @@ class AuthenticatedSessionController extends Controller
      */
     public function storeAdmin(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $user = $request->authenticate();
 
-        if (Auth::user()->role !== 'admin') {
-            Auth::guard('web')->logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
+        if ($user->role !== 'admin') {
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'email' => 'Akses ditolak. Anda bukan Admin.',
             ]);
         }
 
-        $request->session()->regenerate();
+        // Generate and send OTP
+        $user->generateOtp();
+        $user->sendOtpMail();
 
-        return redirect()->intended(route('admin.dashboard', absolute: false));
+        session([
+            'otp_user_id' => $user->id,
+            'otp_role' => $user->role,
+            'otp_remember' => $request->boolean('remember'),
+        ]);
+
+        return redirect()->route('otp.verify');
     }
 
     /**
@@ -82,20 +103,25 @@ class AuthenticatedSessionController extends Controller
      */
     public function storePanitia(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $user = $request->authenticate();
 
-        if (Auth::user()->role !== 'panitia') {
-            Auth::guard('web')->logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
+        if ($user->role !== 'panitia') {
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'email' => 'Akses ditolak. Anda bukan Panitia.',
             ]);
         }
 
-        $request->session()->regenerate();
+        // Generate and send OTP
+        $user->generateOtp();
+        $user->sendOtpMail();
 
-        return redirect()->intended(route('panitia.dashboard', absolute: false));
+        session([
+            'otp_user_id' => $user->id,
+            'otp_role' => $user->role,
+            'otp_remember' => $request->boolean('remember'),
+        ]);
+
+        return redirect()->route('otp.verify');
     }
 
     /**

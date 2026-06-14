@@ -12,10 +12,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         :root {
-            --navy: #0f285c; /* Biru Dongker Khas Polvent */
-            --navy-light: #1e3a8a;
-            --blue: #2563eb;
-            --blue-hover: #1d4ed8;
+            --primary: #0f285c; /* Navy Khas Polvent */
+            --primary-hover: #1e3a8a;
+            --secondary: #2563eb; 
+            --navy: #0f285c;
             --emerald: #059669;
             --text-main: #334155;
             --text-muted: #64748b;
@@ -49,17 +49,15 @@
         
         .navbar-links { display: flex; gap: 2.5rem; }
         .navbar-links a { color: var(--text-main); font-size: 0.9rem; font-weight: 600; transition: color 0.2s; }
-        .navbar-links a:hover { color: var(--blue); }
+        .navbar-links a:hover { color: var(--primary); }
 
         .navbar-auth { display: flex; gap: 1rem; align-items: center; }
-        .btn-nav-login { font-weight: 600; color: var(--navy); font-size: 0.9rem; transition: color 0.2s; }
-        .btn-nav-login:hover { color: var(--blue); }
         .btn-nav-register {
-            background: var(--navy); color: white; padding: 0.5rem 1.25rem;
-            border-radius: 8px; font-weight: 600; font-size: 0.9rem;
-            transition: all 0.3s; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+            background: var(--primary); color: white; padding: 0.5rem 1.5rem;
+            border-radius: 999px; font-weight: 600; font-size: 0.95rem;
+            transition: all 0.3s; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
         }
-        .btn-nav-register:hover { background: var(--blue); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3); }
+        .btn-nav-register:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4); }
 
         /* ======= HERO SECTION (CAMPUS BG + GLASS) ======= */
         .hero {
@@ -67,7 +65,7 @@
             min-height: 100vh;
             padding-top: 72px;
             display: flex; align-items: center;
-            /* Background image with neutral dark gradient overlay (Tanpa tint biru) */
+            /* Background image with neutral dark gradient overlay */
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%), 
                         url('{{ asset("images/bg-kampus.jpg") }}') center/cover no-repeat fixed;
             overflow: hidden;
@@ -80,27 +78,27 @@
         
         .hero-content { color: white; }
         .hero-badge {
-            display: inline-block; padding: 0.4rem 1rem; border-radius: 50px;
+            display: inline-block; padding: 0.4rem 1.2rem; border-radius: 50px;
             background: rgba(37, 99, 235, 0.2); border: 1px solid rgba(37, 99, 235, 0.4);
-            color: #60a5fa; font-size: 0.8rem; font-weight: 600; margin-bottom: 1.5rem;
+            color: #60a5fa; font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem;
             backdrop-filter: blur(8px);
         }
-        .hero h1 { font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; }
-        .hero h1 span { color: #3b82f6; text-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+        .hero h1 { font-size: clamp(2.5rem, 4vw, 3.8rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; }
+        .hero h1 span { color: #ffffff; text-shadow: 0 2px 12px rgba(255,255,255,0.2); }
         .hero p { font-size: 1.1rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 2.5rem; max-width: 90%; }
         
         .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
         .btn-primary {
-            background: var(--blue); color: white; padding: 0.875rem 2rem;
-            border-radius: 12px; font-weight: 700; font-size: 1rem;
+            background: white; color: var(--primary); padding: 0.875rem 2rem;
+            border-radius: 999px; font-weight: 700; font-size: 1rem;
             display: flex; align-items: center; gap: 0.5rem;
-            transition: all 0.3s; box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+            transition: all 0.3s; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
-        .btn-primary:hover { background: var(--blue-hover); transform: translateY(-3px); box-shadow: 0 12px 28px rgba(37, 99, 235, 0.5); }
+        .btn-primary:hover { background: #f8fafc; transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15); }
         
         .btn-secondary-glass {
-            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white; padding: 0.875rem 2rem; border-radius: 12px;
+            background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white; padding: 0.875rem 2rem; border-radius: 999px;
             font-weight: 600; font-size: 1rem; backdrop-filter: blur(10px);
             transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem;
         }
@@ -113,12 +111,12 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            border-left: 4px solid var(--blue);
+            border-left: 4px solid var(--secondary);
             border-radius: 16px; padding: 1.25rem 1.5rem;
             display: flex; align-items: flex-start; gap: 1rem;
             color: white; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .glass-card:hover { transform: translateX(-5px) scale(1.02); border-color: rgba(255,255,255,0.3); border-left-color: #60a5fa; background: rgba(255,255,255,0.12); box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+        .glass-card:hover { transform: translateX(-5px) scale(1.02); border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.12); box-shadow: 0 10px 30px rgba(0,0,0,0.25); border-left-color: #60a5fa; }
         
         .gc-icon { 
             width: 48px; height: 48px; border-radius: 12px; 
@@ -142,7 +140,7 @@
             width: 1px; background: #e2e8f0;
         }
         .stat-num { font-size: 3rem; font-weight: 900; font-family: 'Outfit'; color: var(--navy); line-height: 1; margin-bottom: 0.5rem; }
-        .stat-num span { color: var(--blue); }
+        .stat-num span { color: var(--primary); }
         .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
         /* ======= EVENTS SECTION ======= */
@@ -150,7 +148,7 @@
         .section-header { margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: flex-end; }
         .section-title { font-size: 2.5rem; font-weight: 800; color: var(--navy); margin-bottom: 0.5rem; }
         .section-subtitle { color: var(--text-muted); font-size: 1.1rem; }
-        .link-all { color: var(--blue); font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: gap 0.3s; }
+        .link-all { color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: gap 0.3s; }
         .link-all:hover { gap: 0.75rem; }
 
         .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
@@ -162,7 +160,7 @@
         }
         .event-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1); border-color: #cbd5e1; }
         
-        .ec-image { height: 200px; position: relative; background: var(--navy-light); overflow: hidden; }
+        .ec-image { height: 200px; position: relative; background: linear-gradient(135deg, var(--primary), var(--secondary)); overflow: hidden; }
         .ec-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
         .event-card:hover .ec-image img { transform: scale(1.05); }
         .ec-date {
@@ -173,7 +171,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         .ec-date .day { font-size: 1.25rem; line-height: 1; }
-        .ec-date .month { font-size: 0.7rem; text-transform: uppercase; color: var(--blue); }
+        .ec-date .month { font-size: 0.7rem; text-transform: uppercase; color: var(--primary); }
 
         .ec-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
         .ec-title { font-size: 1.25rem; font-weight: 700; color: var(--navy); margin-bottom: 0.75rem; line-height: 1.3; }
@@ -186,7 +184,7 @@
         .btn-card:hover { background: var(--navy); color: white; }
 
         /* ======= FEATURES SECTION ======= */
-        .features-wrap { background: var(--navy); color: white; padding: 6rem 0; }
+        .features-wrap { background: linear-gradient(135deg, var(--navy), #1e293b); color: white; padding: 6rem 0; }
         .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-top: 4rem; }
         .feat-item { padding: 2rem; background: rgba(255,255,255,0.03); border-radius: 24px; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s; }
         .feat-item:hover { transform: translateY(-5px); background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
@@ -202,8 +200,119 @@
         .footer-title { color: var(--navy); font-weight: 700; font-family: 'Outfit'; font-size: 1.1rem; margin-bottom: 1.5rem; }
         .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
         .footer-links a { color: #64748b; transition: color 0.2s; font-size: 0.9rem; }
-        .footer-links a:hover { color: var(--blue); }
+        .footer-links a:hover { color: var(--primary); }
         .footer-bottom { max-width: 1200px; margin: 0 auto; text-align: center; padding-top: 2rem; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #94a3b8; }
+
+        /* ======= EVENT SLIDER ======= */
+        .slider-outer {
+            position: relative;
+            overflow: hidden;
+            padding: 1rem 0 1.5rem;
+            cursor: grab;
+            user-select: none;
+        }
+        .slider-outer:active { cursor: grabbing; }
+
+        .slider-track {
+            display: flex;
+            gap: 1.5rem;
+            padding: 0.5rem 2rem;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+
+        .slider-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 320px;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .slider-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(15, 40, 92, 0.13);
+            border-color: #bfdbfe;
+        }
+
+        .sc-image {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        .sc-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .slider-card:hover .sc-image img { transform: scale(1.06); }
+
+        .sc-image-placeholder {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.6);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        .sc-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 60%);
+        }
+        .sc-date-badge {
+            position: absolute; top: 1rem; right: 1rem;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 0.5rem 0.75rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+        .sc-date-day { display: block; font-size: 1.25rem; font-weight: 900; color: var(--navy); line-height: 1; }
+        .sc-date-mon { display: block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--secondary); margin-top: 2px; }
+
+        .sc-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+        .sc-title { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.6rem; line-height: 1.35; }
+        .sc-desc { color: var(--text-muted); font-size: 0.875rem; line-height: 1.6; flex: 1; margin-bottom: 1.25rem; }
+        .sc-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 1rem; border-top: 1px solid #f1f5f9; }
+        .sc-quota { display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: var(--text-muted); }
+        .sc-quota strong { color: var(--emerald); font-weight: 700; }
+        .sc-btn {
+            background: var(--navy); color: white;
+            padding: 0.45rem 1rem; border-radius: 8px;
+            font-size: 0.8rem; font-weight: 600;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .sc-btn:hover { background: var(--secondary); color: white; transform: translateX(2px); }
+
+        /* Arrow buttons */
+        .slider-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 44px; height: 44px; border-radius: 50%;
+            background: white; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            color: var(--navy);
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .slider-arrow:hover { background: var(--navy); color: white; transform: translateY(-50%) scale(1.1); }
+        .slider-prev { left: 1rem; }
+        .slider-next { right: 1rem; }
+
+        /* Dots */
+        .slider-dots {
+            display: flex; justify-content: center; gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        .slider-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #cbd5e1; border: none; cursor: pointer;
+            transition: all 0.3s; padding: 0;
+        }
+        .slider-dot.active { width: 24px; border-radius: 99px; background: var(--navy); }
 
         /* ======= RESPONSIVE ======= */
         @media (max-width: 1024px) {
@@ -215,6 +324,7 @@
             .stats-container { grid-template-columns: repeat(2, 1fr); gap: 2rem 0; padding: 2rem; }
             .stat-box:nth-child(2)::after { display: none; }
             .feat-grid { grid-template-columns: repeat(2, 1fr); }
+            .slider-card { min-width: 280px; max-width: 280px; }
         }
         @media (max-width: 768px) {
             .navbar-links { display: none; }
@@ -224,7 +334,9 @@
             .feat-grid { grid-template-columns: 1fr; }
             .footer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
             #about > div { grid-template-columns: 1fr !important; gap: 2rem !important; }
-            #about img { display: none; } /* Hide the big logo on small screens to save space */
+            #about img { display: none; }
+            .slider-card { min-width: 260px; max-width: 260px; }
+            .slider-arrow { display: none; }
         }
     </style>
 </head>
@@ -250,16 +362,28 @@
 
         <div class="navbar-auth">
             @auth
-                @if(auth()->user()->role === 'admin')
-                    <a href="{{ route('admin.dashboard') }}" class="btn-nav-register">Buka Dashboard</a>
-                @elseif(auth()->user()->role === 'panitia')
-                    <a href="{{ route('panitia.dashboard') }}" class="btn-nav-register">Buka Dashboard</a>
-                @else
-                    <a href="{{ route('dashboard') }}" class="btn-nav-register">Buka Dashboard</a>
-                @endif
+                @php
+                    $dashboardUrl = match(auth()->user()->role) {
+                        'admin' => route('admin.dashboard'),
+                        'panitia' => route('panitia.dashboard'),
+                        default => route('dashboard')
+                    };
+                @endphp
+                <a href="{{ $dashboardUrl }}" class="btn-nav-user" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; padding: 0.35rem 0.75rem; border-radius: 999px; background: rgba(79, 70, 229, 0.1); border: 1px solid rgba(79, 70, 229, 0.2); transition: all 0.3s;">
+                    <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                    <span style="font-weight: 600; color: var(--navy); font-size: 0.9rem;">{{ auth()->user()->name }}</span>
+                </a>
+                
+                <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                    @csrf
+                    <button type="submit" style="background: none; border: none; cursor: pointer; color: #ef4444; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 0.3rem; padding: 0.5rem;">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    </button>
+                </form>
             @else
-                <a href="{{ route('login') }}" class="btn-nav-login">Masuk</a>
-                <a href="{{ route('register') }}" class="btn-nav-register">Daftar Sekarang</a>
+                <a href="{{ route('login') }}" class="btn-nav-register">Login</a>
             @endauth
         </div>
     </nav>
@@ -281,8 +405,9 @@
                         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </a>
                     @guest
-                        <a href="{{ route('register') }}" class="btn-secondary-glass">
-                            Buat Akun Mahasiswa
+                        <a href="{{ route('login') }}" class="btn-secondary-glass">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+                            Login
                         </a>
                     @endguest
                 </div>
@@ -342,57 +467,113 @@
         </div>
     </div>
 
-    <!-- UPCOMING EVENTS -->
-    <section class="section-padding" id="events">
-        <div class="section-header">
-            <div>
-                <h2 class="section-title">Event Kampus Terbaru</h2>
-                <p class="section-subtitle">Jangan lewatkan kesempatan untuk mengembangkan diri Anda.</p>
+    <!-- UPCOMING EVENTS - AUTO SLIDER -->
+    <section style="padding: 6rem 0; background: var(--bg-light);" id="events">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Event Kampus Terbaru</h2>
+                    <p class="section-subtitle">Jangan lewatkan kesempatan untuk mengembangkan diri Anda.</p>
+                </div>
+                <a href="{{ route('login') }}" class="link-all">
+                    Lihat Semua Event
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
             </div>
-            <a href="{{ route('login') }}" class="link-all">
-                Lihat Semua Event
-                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-            </a>
         </div>
 
-        <div class="events-grid">
-            @forelse($events as $event)
-                <div class="event-card">
-                    <div class="ec-image">
+        @if($events->count() > 0)
+        <!-- SLIDER WRAPPER -->
+        <div class="slider-outer">
+            <div class="slider-track" id="sliderTrack">
+                @foreach($events as $event)
+                <div class="slider-card">
+                    <div class="sc-image">
                         @if($event->poster)
                             <img src="{{ Storage::url($event->poster) }}" alt="{{ $event->title }}">
                         @else
-                            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--blue),var(--navy));color:white;">
-                                <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            <div class="sc-image-placeholder">
+                                <svg width="52" height="52" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                             </div>
                         @endif
-                        <div class="ec-date">
-                            <div class="day">{{ $event->event_date->format('d') }}</div>
-                            <div class="month">{{ $event->event_date->format('M') }}</div>
+                        <div class="sc-date-badge">
+                            <span class="sc-date-day">{{ $event->event_date->format('d') }}</span>
+                            <span class="sc-date-mon">{{ $event->event_date->format('M') }}</span>
                         </div>
+                        <div class="sc-overlay"></div>
                     </div>
-                    <div class="ec-body">
-                        <h3 class="ec-title">{{ $event->title }}</h3>
-                        <p class="ec-desc">{{ $event->description }}</p>
-                        <div class="ec-footer">
-                            <div class="ec-quota">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                                Sisa Kuota: <strong>{{ $event->quota }}</strong>
+                    <div class="sc-body">
+                        <h3 class="sc-title">{{ $event->title }}</h3>
+                        <p class="sc-desc">{{ Str::limit($event->description, 90) }}</p>
+                        <div class="sc-footer">
+                            <div class="sc-quota">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span>Kuota: <strong>{{ $event->quota }}</strong></span>
                             </div>
-                            <a href="{{ route('login') }}" class="btn-card">Detail</a>
+                            <a href="{{ route('login') }}" class="sc-btn">Lihat Detail →</a>
                         </div>
                     </div>
                 </div>
-            @empty
-                <div style="grid-column:1/-1;text-align:center;padding:4rem;background:white;border-radius:24px;border:1px dashed #cbd5e1;">
-                    <div style="margin-bottom:1rem;color:#94a3b8;display:flex;justify-content:center;">
-                        <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                @endforeach
+                {{-- Duplicate slides for infinite loop feel --}}
+                @foreach($events as $event)
+                <div class="slider-card">
+                    <div class="sc-image">
+                        @if($event->poster)
+                            <img src="{{ Storage::url($event->poster) }}" alt="{{ $event->title }}">
+                        @else
+                            <div class="sc-image-placeholder">
+                                <svg width="52" height="52" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            </div>
+                        @endif
+                        <div class="sc-date-badge">
+                            <span class="sc-date-day">{{ $event->event_date->format('d') }}</span>
+                            <span class="sc-date-mon">{{ $event->event_date->format('M') }}</span>
+                        </div>
+                        <div class="sc-overlay"></div>
                     </div>
-                    <h3 class="font-outfit" style="font-size:1.5rem;color:var(--navy);margin-bottom:0.5rem;">Belum ada event dibuka</h3>
-                    <p style="color:var(--text-muted);">Silakan cek kembali secara berkala untuk event terbaru.</p>
+                    <div class="sc-body">
+                        <h3 class="sc-title">{{ $event->title }}</h3>
+                        <p class="sc-desc">{{ Str::limit($event->description, 90) }}</p>
+                        <div class="sc-footer">
+                            <div class="sc-quota">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span>Kuota: <strong>{{ $event->quota }}</strong></span>
+                            </div>
+                            <a href="{{ route('login') }}" class="sc-btn">Lihat Detail →</a>
+                        </div>
+                    </div>
                 </div>
-            @endforelse
+                @endforeach
+            </div>
+
+            <!-- Arrow buttons -->
+            <button class="slider-arrow slider-prev" id="sliderPrev" aria-label="Previous">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button class="slider-arrow slider-next" id="sliderNext" aria-label="Next">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            </button>
         </div>
+
+        <!-- Dots -->
+        <div class="slider-dots" id="sliderDots">
+            @foreach($events as $i => $event)
+                <button class="slider-dot {{ $i === 0 ? 'active' : '' }}" data-index="{{ $i }}" aria-label="Slide {{ $i+1 }}"></button>
+            @endforeach
+        </div>
+
+        @else
+        <div style="max-width:1200px;margin:0 auto;padding:0 2rem;">
+            <div style="text-align:center;padding:4rem;background:white;border-radius:24px;border:1px dashed #cbd5e1;">
+                <div style="margin-bottom:1rem;color:#94a3b8;display:flex;justify-content:center;">
+                    <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <h3 class="font-outfit" style="font-size:1.5rem;color:var(--navy);margin-bottom:0.5rem;">Belum ada event dibuka</h3>
+                <p style="color:var(--text-muted);">Silakan cek kembali secara berkala untuk event terbaru.</p>
+            </div>
+        </div>
+        @endif
     </section>
 
     <!-- FEATURES / KEUNGGULAN -->
@@ -430,32 +611,44 @@
     </section>
 
     <!-- ABOUT US / TENTANG KAMI -->
-    <section class="section-padding" id="about" style="background: white; border-top: 1px solid #f1f5f9; padding-bottom: 6rem;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1100px; margin: 0 auto;">
-            <div>
-                <h2 class="section-title">Tentang POLVENT</h2>
-                <div style="width: 60px; height: 5px; background: var(--blue); border-radius: 4px; margin-bottom: 1.5rem;"></div>
-                <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; margin-bottom: 1.5rem;">
-                    POLVENT (Politeknik Event) adalah platform manajemen event resmi yang dikembangkan untuk memfasilitasi seluruh kegiatan mahasiswa di lingkungan Politeknik Negeri Bengkalis.
+    <section class="section-padding" id="about" style="background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); position: relative; overflow: hidden; padding: 8rem 2rem;">
+        <!-- Decorative Background Elements -->
+        <div style="position: absolute; top: -10%; right: -5%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(37,99,235,0.05) 0%, rgba(255,255,255,0) 70%); border-radius: 50%;"></div>
+        <div style="position: absolute; bottom: -10%; left: -5%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(5,150,105,0.03) 0%, rgba(255,255,255,0) 70%); border-radius: 50%;"></div>
+
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;">
+            <!-- Left Content -->
+            <div style="padding-right: 2rem;">
+                <div style="display: inline-block; padding: 0.4rem 1.2rem; border-radius: 50px; background: rgba(37, 99, 235, 0.1); color: var(--secondary); font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem; letter-spacing: 0.5px;">TENTANG KAMI</div>
+                <h2 class="section-title" style="font-size: 2.8rem; line-height: 1.2; margin-bottom: 1.5rem;">Platform Modern Manajemen <span style="color: var(--secondary);">Event Kampus</span></h2>
+                
+                <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                    <strong>POLVENT</strong> dirancang eksklusif untuk mendigitalisasi dan menyederhanakan ekosistem kegiatan mahasiswa di Politeknik Negeri Bengkalis.
                 </p>
-                <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.7;">
-                    Kami hadir untuk menjembatani antara panitia penyelenggara dan peserta event, memastikan alur informasi kegiatan kampus tersampaikan secara efektif, efisien, dan transparan.
+                <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; margin-bottom: 2.5rem;">
+                    Kami mengeliminasi kerumitan birokrasi manual, menjembatani panitia dan peserta melalui satu portal terintegrasi yang cepat, transparan, dan sangat mudah digunakan.
                 </p>
-                <div style="margin-top: 2.5rem; display: flex; gap: 1.5rem;">
-                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0; flex: 1;">
-                        <h4 style="color: var(--navy); font-weight: 800; font-family: 'Outfit'; margin-bottom: 0.5rem; font-size: 1.1rem;">Visi Kami</h4>
-                        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">Mendigitalisasi dan mempermudah administrasi seluruh kegiatan kemahasiswaan.</p>
-                    </div>
-                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0; flex: 1;">
-                        <h4 style="color: var(--navy); font-weight: 800; font-family: 'Outfit'; margin-bottom: 0.5rem; font-size: 1.1rem;">Misi Kami</h4>
-                        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">Menyediakan platform yang aman, real-time, dan mudah diakses semua mahasiswa.</p>
+
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                    <div style="background: white; padding: 2rem; border-radius: 20px; flex: 1; min-width: 240px; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04); border: 1px solid rgba(226, 232, 240, 0.8); position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--secondary);"></div>
+                        <div style="width: 48px; height: 48px; border-radius: 14px; background: rgba(37, 99, 235, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        </div>
+                        <h4 style="color: var(--navy); font-weight: 800; font-family: 'Outfit'; margin-bottom: 0.75rem; font-size: 1.25rem;">Visi Misi</h4>
+                        <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">Menjadi pusat informasi tunggal yang andal, mewujudkan administrasi event yang efisien, aman, dan tanpa kertas (paperless).</p>
                     </div>
                 </div>
             </div>
-            <div style="position: relative; display: flex; justify-content: center; align-items: center; padding: 2rem;">
-                <div style="position: absolute; top: 0; right: 20px; width: 120px; height: 120px; background: var(--blue); opacity: 0.08; border-radius: 50%;"></div>
-                <div style="position: absolute; bottom: 0; left: 20px; width: 180px; height: 180px; background: var(--navy); opacity: 0.05; border-radius: 50%;"></div>
-                <img src="{{ asset('images/logo-polvent.png') }}" alt="Tentang POLVENT" style="width: 100%; max-width: 320px; display: block; filter: drop-shadow(0 20px 30px rgba(15, 40, 92, 0.15)); position: relative; z-index: 2;">
+
+            <!-- Right Visual -->
+            <div style="position: relative; display: flex; justify-content: center; align-items: center;">
+                <div style="position: absolute; inset: 0; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; opacity: 0.1; transform: scale(1.1); filter: blur(20px);"></div>
+                <div style="background: white; border-radius: 32px; padding: 3rem; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08); border: 1px solid white; position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; max-width: 400px;">
+                    <img src="{{ asset('images/logo-polvent.png') }}" alt="POLVENT" style="width: 180px; height: auto; margin-bottom: 2rem; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));">
+                    <h3 style="font-family: 'Outfit'; color: var(--navy); font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">Politeknik Event</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">Sistem Informasi Manajemen Kegiatan Mahasiswa</p>
+                </div>
             </div>
         </div>
     </section>
@@ -464,11 +657,19 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-brand">
-                <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;height:48px;">
+                <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;height:54px;">
                     <img src="{{ asset('images/logo-polbeng.png') }}" alt="Polbeng" style="height:100%;width:auto;object-fit:contain;">
-                    <img src="{{ asset('images/logo-polvent.png') }}" alt="Polvent" style="height:200%;width:auto;object-fit:contain;">
+                    <div style="width: 2px; height: 100%; background: #e2e8f0;"></div>
+                    <img src="{{ asset('images/logo-polvent.png') }}" alt="Polvent" style="height:220%;width:auto;object-fit:contain;">
                 </div>
-                <p>Pusat informasi dan pendaftaran event kampus Politeknik Negeri Bengkalis terintegrasi. Mudah, cepat, dan aman.</p>
+                <p style="font-size: 1rem; color: #475569; max-width: 400px; line-height: 1.7;">
+                    Pusat informasi dan pendaftaran seluruh event kampus Politeknik Negeri Bengkalis terintegrasi. Lebih mudah, cepat, dan 100% aman.
+                </p>
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <!-- Social placeholders -->
+                    <a href="#" style="width: 36px; height: 36px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: var(--primary); transition: all 0.2s;"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+                    <a href="#" style="width: 36px; height: 36px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: var(--primary); transition: all 0.2s;"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.20 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+                </div>
             </div>
             <div>
                 <h4 class="footer-title">Jelajahi</h4>
@@ -497,6 +698,140 @@
             &copy; {{ date('Y') }} Platform POLVENT - Politeknik Negeri Bengkalis. All rights reserved.
         </div>
     </footer>
+
+    <script>
+    // =================== EVENT SLIDER ===================
+    (function() {
+        const track = document.getElementById('sliderTrack');
+        if (!track) return;
+
+        const cards = track.querySelectorAll('.slider-card');
+        const totalReal = cards.length / 2; // Because we duplicated
+        const dots = document.querySelectorAll('.slider-dot');
+        const cardWidth = cards[0].offsetWidth + 24; // width + gap (1.5rem=24px)
+
+        let currentIndex = 0;
+        let autoTimer = null;
+        let isDragging = false;
+        let startX = 0;
+        let startTranslate = 0;
+        let currentTranslate = 0;
+
+        function getTranslate() {
+            return -(currentIndex * cardWidth);
+        }
+
+        function goTo(index, animated = true) {
+            if (!animated) track.style.transition = 'none';
+            else track.style.transition = 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+
+            currentIndex = index;
+            currentTranslate = getTranslate();
+            track.style.transform = `translateX(${currentTranslate}px)`;
+
+            // Update dots (loop within real count)
+            const realIndex = currentIndex % totalReal;
+            dots.forEach((d, i) => d.classList.toggle('active', i === realIndex));
+        }
+
+        function next() {
+            currentIndex++;
+            if (currentIndex >= totalReal * 2) {
+                // Jump back to start without animation
+                goTo(0, false);
+                requestAnimationFrame(() => requestAnimationFrame(() => goTo(1)));
+                return;
+            }
+            // Seamless infinite: when crossing into duplicates, quietly reset
+            if (currentIndex === totalReal) {
+                goTo(currentIndex);
+                // After animation, silently jump to real start
+                setTimeout(() => { goTo(0, false); }, 560);
+                return;
+            }
+            goTo(currentIndex);
+        }
+
+        function prev() {
+            if (currentIndex <= 0) {
+                // Jump to the duplicate set end
+                goTo(totalReal, false);
+                requestAnimationFrame(() => requestAnimationFrame(() => goTo(totalReal - 1)));
+                return;
+            }
+            currentIndex--;
+            goTo(currentIndex);
+        }
+
+        function startAuto() {
+            clearInterval(autoTimer);
+            autoTimer = setInterval(next, 3200);
+        }
+
+        function stopAuto() { clearInterval(autoTimer); }
+
+        // Arrow buttons
+        const btnPrev = document.getElementById('sliderPrev');
+        const btnNext = document.getElementById('sliderNext');
+        if (btnPrev) btnPrev.addEventListener('click', () => { stopAuto(); prev(); startAuto(); });
+        if (btnNext) btnNext.addEventListener('click', () => { stopAuto(); next(); startAuto(); });
+
+        // Dot buttons
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => { stopAuto(); goTo(i); startAuto(); });
+        });
+
+        // Mouse drag
+        track.addEventListener('mousedown', e => {
+            isDragging = true;
+            startX = e.clientX;
+            startTranslate = currentTranslate;
+            track.style.transition = 'none';
+            stopAuto();
+        });
+        window.addEventListener('mousemove', e => {
+            if (!isDragging) return;
+            const diff = e.clientX - startX;
+            track.style.transform = `translateX(${startTranslate + diff}px)`;
+        });
+        window.addEventListener('mouseup', e => {
+            if (!isDragging) return;
+            isDragging = false;
+            const diff = e.clientX - startX;
+            if (diff < -60) next();
+            else if (diff > 60) prev();
+            else goTo(currentIndex);
+            startAuto();
+        });
+
+        // Touch drag
+        track.addEventListener('touchstart', e => {
+            startX = e.touches[0].clientX;
+            startTranslate = currentTranslate;
+            track.style.transition = 'none';
+            stopAuto();
+        }, { passive: true });
+        track.addEventListener('touchmove', e => {
+            const diff = e.touches[0].clientX - startX;
+            track.style.transform = `translateX(${startTranslate + diff}px)`;
+        }, { passive: true });
+        track.addEventListener('touchend', e => {
+            const diff = e.changedTouches[0].clientX - startX;
+            if (diff < -50) next();
+            else if (diff > 50) prev();
+            else goTo(currentIndex);
+            startAuto();
+        });
+
+        // Pause on hover
+        track.addEventListener('mouseenter', stopAuto);
+        track.addEventListener('mouseleave', startAuto);
+
+        // Init
+        goTo(0, false);
+        startAuto();
+    })();
+    </script>
 
 </body>
 </html>
