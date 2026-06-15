@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\LoginHistory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,7 +48,7 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request for Mahasiswa.
+     * Handle login for Mahasiswa — no OTP, direct login after captcha.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
@@ -59,21 +60,22 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-        // Generate and send OTP
-        $user->generateOtp();
-        $user->sendOtpMail();
+        Auth::login($user, $request->boolean('remember'));
+        $request->session()->regenerate();
 
-        session([
-            'otp_user_id' => $user->id,
-            'otp_role' => $user->role,
-            'otp_remember' => $request->boolean('remember'),
+        LoginHistory::create([
+            'user_id'    => $user->id,
+            'email'      => $user->email,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'status'     => 'success',
         ]);
 
-        return redirect()->route('otp.verify');
+        return redirect()->route('mahasiswa.dashboard');
     }
 
     /**
-     * Handle an incoming authentication request for Admin.
+     * Handle login for Admin — no OTP, direct login after captcha.
      */
     public function storeAdmin(LoginRequest $request): RedirectResponse
     {
@@ -85,21 +87,22 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-        // Generate and send OTP
-        $user->generateOtp();
-        $user->sendOtpMail();
+        Auth::login($user, $request->boolean('remember'));
+        $request->session()->regenerate();
 
-        session([
-            'otp_user_id' => $user->id,
-            'otp_role' => $user->role,
-            'otp_remember' => $request->boolean('remember'),
+        LoginHistory::create([
+            'user_id'    => $user->id,
+            'email'      => $user->email,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'status'     => 'success',
         ]);
 
-        return redirect()->route('otp.verify');
+        return redirect()->route('admin.dashboard');
     }
 
     /**
-     * Handle an incoming authentication request for Panitia.
+     * Handle login for Panitia — no OTP, direct login after captcha.
      */
     public function storePanitia(LoginRequest $request): RedirectResponse
     {
@@ -111,17 +114,18 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-        // Generate and send OTP
-        $user->generateOtp();
-        $user->sendOtpMail();
+        Auth::login($user, $request->boolean('remember'));
+        $request->session()->regenerate();
 
-        session([
-            'otp_user_id' => $user->id,
-            'otp_role' => $user->role,
-            'otp_remember' => $request->boolean('remember'),
+        LoginHistory::create([
+            'user_id'    => $user->id,
+            'email'      => $user->email,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'status'     => 'success',
         ]);
 
-        return redirect()->route('otp.verify');
+        return redirect()->route('panitia.dashboard');
     }
 
     /**
