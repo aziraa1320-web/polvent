@@ -23,6 +23,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; background: var(--bg-light); color: var(--text-main); overflow-x: hidden; }
         h1, h2, h3, h4, .font-outfit { font-family: 'Outfit', sans-serif; }
         a { text-decoration: none; }
@@ -48,8 +49,10 @@
         .navbar-logo img.logo-polvent { height: 200%; width: auto; }
         
         .navbar-links { display: flex; gap: 2.5rem; }
-        .navbar-links a { color: var(--text-main); font-size: 0.9rem; font-weight: 600; transition: color 0.2s; }
+        .navbar-links a { color: var(--text-main); font-size: 0.9rem; font-weight: 600; transition: all 0.2s; position: relative; }
         .navbar-links a:hover { color: var(--primary); }
+        .navbar-links a.active { color: var(--primary); font-weight: 700; }
+        .navbar-links a.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background: var(--primary); border-radius: 2px; }
 
         .navbar-auth { display: flex; gap: 1rem; align-items: center; }
         .btn-nav-register {
@@ -354,10 +357,10 @@
         </a>
 
         <div class="navbar-links">
-            <a href="{{ route('home') }}">Beranda</a>
-            <a href="#events">Daftar Event</a>
-            <a href="#features">Keunggulan</a>
-            <a href="#about">Tentang Kami</a>
+            <a href="#home" class="nav-item">Beranda</a>
+            <a href="#events" class="nav-item">Daftar Event</a>
+            <a href="#features" class="nav-item">Keunggulan</a>
+            <a href="#about" class="nav-item">Tentang Kami</a>
         </div>
 
         <div class="navbar-auth">
@@ -389,7 +392,7 @@
     </nav>
 
     <!-- HERO SECTION -->
-    <section class="hero">
+    <section class="hero" id="home">
         <div class="hero-container">
             <div class="hero-content">
                 <div class="hero-badge">
@@ -611,44 +614,59 @@
     </section>
 
     <!-- ABOUT US / TENTANG KAMI -->
-    <section class="section-padding" id="about" style="background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); position: relative; overflow: hidden; padding: 8rem 2rem;">
+    <section id="about" style="background: var(--navy); color: white; position: relative; overflow: hidden; padding: 8rem 2rem; margin-top: 4rem;">
         <!-- Decorative Background Elements -->
-        <div style="position: absolute; top: -10%; right: -5%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(37,99,235,0.05) 0%, rgba(255,255,255,0) 70%); border-radius: 50%;"></div>
-        <div style="position: absolute; bottom: -10%; left: -5%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(5,150,105,0.03) 0%, rgba(255,255,255,0) 70%); border-radius: 50%;"></div>
+        <div style="position: absolute; top: -20%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(96,165,250,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%;"></div>
+        <div style="position: absolute; bottom: -20%; left: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(52,211,153,0.1) 0%, rgba(255,255,255,0) 70%); border-radius: 50%;"></div>
 
-        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;">
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;" class="about-grid">
             <!-- Left Content -->
-            <div style="padding-right: 2rem;">
-                <div style="display: inline-block; padding: 0.4rem 1.2rem; border-radius: 50px; background: rgba(37, 99, 235, 0.1); color: var(--secondary); font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem; letter-spacing: 0.5px;">TENTANG KAMI</div>
-                <h2 class="section-title" style="font-size: 2.8rem; line-height: 1.2; margin-bottom: 1.5rem;">Platform Modern Manajemen <span style="color: var(--secondary);">Event Kampus</span></h2>
+            <div style="padding-right: 2rem;" class="about-content">
+                <div style="display: inline-block; padding: 0.4rem 1.2rem; border-radius: 50px; background: rgba(255, 255, 255, 0.1); color: #60a5fa; font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem; letter-spacing: 0.5px; border: 1px solid rgba(255,255,255,0.2);">TENTANG POLVENT</div>
+                <h2 class="section-title" style="font-size: clamp(2rem, 3vw, 2.8rem); line-height: 1.2; margin-bottom: 1.5rem; color: white;">Revolusi Digital<br><span style="color: #60a5fa;">Manajemen Event Kampus</span></h2>
                 
-                <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
-                    <strong>POLVENT</strong> dirancang eksklusif untuk mendigitalisasi dan menyederhanakan ekosistem kegiatan mahasiswa di Politeknik Negeri Bengkalis.
+                <p style="color: #cbd5e1; font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                    <strong>POLVENT</strong> (Politeknik Event) adalah inovasi digital terdepan yang dirancang khusus untuk menciptakan ekosistem kegiatan mahasiswa yang cerdas dan terintegrasi di Politeknik Negeri Bengkalis.
                 </p>
-                <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; margin-bottom: 2.5rem;">
-                    Kami mengeliminasi kerumitan birokrasi manual, menjembatani panitia dan peserta melalui satu portal terintegrasi yang cepat, transparan, dan sangat mudah digunakan.
+                <p style="color: #cbd5e1; font-size: 1.05rem; line-height: 1.8; margin-bottom: 2.5rem;">
+                    Kami mentransformasi proses birokrasi konvensional menjadi pengalaman digital yang mulus (seamless), menghubungkan penyelenggara acara dan mahasiswa dalam satu platform modern yang transparan, efisien, dan paperless.
                 </p>
 
-                <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-                    <div style="background: white; padding: 2rem; border-radius: 20px; flex: 1; min-width: 240px; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04); border: 1px solid rgba(226, 232, 240, 0.8); position: relative; overflow: hidden;">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--secondary);"></div>
-                        <div style="width: 48px; height: 48px; border-radius: 14px; background: rgba(37, 99, 235, 0.1); color: var(--secondary); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
-                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                        </div>
-                        <h4 style="color: var(--navy); font-weight: 800; font-family: 'Outfit'; margin-bottom: 0.75rem; font-size: 1.25rem;">Visi Misi</h4>
-                        <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">Menjadi pusat informasi tunggal yang andal, mewujudkan administrasi event yang efisien, aman, dan tanpa kertas (paperless).</p>
+                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 20px; flex: 1; min-width: 200px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);">
+                        <h4 style="color: white; font-weight: 800; font-family: 'Outfit'; margin-bottom: 0.5rem; font-size: 1.2rem;">Visi Kami</h4>
+                        <p style="font-size: 0.9rem; color: #94a3b8; line-height: 1.6;">Menjadi sentra informasi tunggal yang tepercaya, mewujudkan tata kelola event yang cerdas, cepat, dan ramah lingkungan.</p>
+                    </div>
+                     <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 20px; flex: 1; min-width: 200px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);">
+                        <h4 style="color: white; font-weight: 800; font-family: 'Outfit'; margin-bottom: 0.5rem; font-size: 1.2rem;">Misi Kami</h4>
+                        <p style="font-size: 0.9rem; color: #94a3b8; line-height: 1.6;">Menghadirkan kemudahan akses, meningkatkan partisipasi mahasiswa, dan mengamankan setiap data kegiatan secara real-time.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Right Visual -->
-            <div style="position: relative; display: flex; justify-content: center; align-items: center;">
-                <div style="position: absolute; inset: 0; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; opacity: 0.1; transform: scale(1.1); filter: blur(20px);"></div>
-                <div style="background: white; border-radius: 32px; padding: 3rem; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08); border: 1px solid white; position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; max-width: 400px;">
-                    <img src="{{ asset('images/logo-polvent.png') }}" alt="POLVENT" style="width: 180px; height: auto; margin-bottom: 2rem; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));">
-                    <h3 style="font-family: 'Outfit'; color: var(--navy); font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">Politeknik Event</h3>
-                    <p style="color: var(--text-muted); font-size: 0.95rem;">Sistem Informasi Manajemen Kegiatan Mahasiswa</p>
+            <div style="position: relative; display: flex; justify-content: center; align-items: center;" class="about-visual">
+                <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%); border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; opacity: 0.2; transform: scale(1.1); filter: blur(30px); animation: morph 8s ease-in-out infinite;"></div>
+                <div style="background: rgba(255, 255, 255, 0.05); border-radius: 32px; padding: 3rem; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.15); position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; max-width: 400px; backdrop-filter: blur(16px);">
+                    <div style="background: white; padding: 1.5rem; border-radius: 50%; margin-bottom: 2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
+                        <img src="{{ asset('images/logo-polvent.png') }}" alt="POLVENT" style="width: 140px; height: auto;">
+                    </div>
+                    <h3 style="font-family: 'Outfit'; color: white; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem;">Politeknik Event</h3>
+                    <p style="color: #cbd5e1; font-size: 1rem;">Masa Depan Event Kampus</p>
                 </div>
+                <style>
+                    @keyframes morph {
+                        0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+                        50% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
+                        100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+                    }
+                    @media (max-width: 768px) {
+                        .about-grid { grid-template-columns: 1fr !important; gap: 3rem !important; }
+                        #about { margin: 2rem 1rem !important; padding: 4rem 1.5rem !important; border-radius: 24px !important; }
+                        .about-content { padding-right: 0 !important; text-align: center; }
+                        .about-visual { display: flex !important; }
+                    }
+                </style>
             </div>
         </div>
     </section>
@@ -833,5 +851,38 @@
     })();
     </script>
 
+    <!-- Add script for active link highlighting -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-item');
+
+            // Highlight active section on scroll
+            window.addEventListener('scroll', () => {
+                let current = '';
+                const scrollY = window.pageYOffset;
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    // Add an offset so it highlights a bit before reaching the exact top
+                    if (scrollY >= (sectionTop - 250)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const href = link.getAttribute('href').substring(1); // get the id
+                    if (href === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // Initial call to set active state on page load
+            window.dispatchEvent(new Event('scroll'));
+        });
+    </script>
 </body>
 </html>
