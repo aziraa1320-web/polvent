@@ -69,7 +69,12 @@ class GoogleController extends Controller
                 'nim' => $this->generateRandomNim(),
                 'password' => Hash::make(Str::random(24)),
                 'email_verified_at' => now(),
+                'is_otp_verified' => true,
             ]);
+        } else {
+            if (!$user->is_otp_verified) {
+                $user->update(['is_otp_verified' => true]);
+            }
         }
 
         Auth::login($user);

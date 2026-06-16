@@ -23,9 +23,22 @@ class RegistrationTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
+            'g-recaptcha-response' => 'mock-token',
         ]);
 
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $this->assertGuest();
+        $response->assertRedirect(route('otp.verify'));
+
+        $user = \App\Models\User::where('email', 'test@example.com')->first();
+        $this->assertNotNull($user);
+        $this->assertFalse($user->is_otp_verified);
+        $this->assertNotNull($user->otp_code);
+
+        $verifyResponse = $this->post('/otp/verify', [
+            'otp' => $user->otp_code,
+        ]);
+
+        $verifyResponse->assertRedirect(route('login'));
+        $this->assertTrue($user->fresh()->is_otp_verified);
     }
 }

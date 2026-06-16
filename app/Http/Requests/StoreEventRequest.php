@@ -7,11 +7,11 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreEventRequest extends FormRequest
 {
     /**
-     * Only admin can create events.
+     * Only admin and panitia can create events.
      */
     public function authorize(): bool
     {
-        return $this->user()->isAdmin();
+        return $this->user()->isAdmin() || $this->user()->isPanitia();
     }
 
     /**

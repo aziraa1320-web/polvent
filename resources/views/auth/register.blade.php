@@ -48,6 +48,9 @@
         }
         .password-toggle:hover { color: #1e293b; }
         .form-input-password { padding-right: 2.5rem; }
+        .security-label { font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem; display: block; }
+        .recaptcha-container { margin-bottom: 1rem; }
+        .recaptcha-error { color: #dc2626; font-size: 0.76rem; margin-top: 0.25rem; }
     </style>
 
     <div class="form-title">Buat Akun Baru 🎓</div>
@@ -62,7 +65,13 @@
         </div>
     </div>
 
-    <form method="POST" action="{{ route('register') }}">
+    @if($errors->any())
+        <div style="color:#dc2626;font-size:0.85rem;text-align:center;margin-bottom:1rem;background:#fef2f2;border:1px solid #fecaca;padding:0.65rem 1rem;border-radius:0.5rem;">
+            {{ $errors->first() }}
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('register') }}" id="register-form">
         @csrf
 
         <div class="form-group">
@@ -139,6 +148,15 @@
             @enderror
         </div>
 
+        {{-- Google reCAPTCHA v2 --}}
+        <span class="security-label">Verifikasi Keamanan</span>
+        <div class="recaptcha-container">
+            <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+            @error('g-recaptcha-response')
+                <div class="recaptcha-error">{{ $message }}</div>
+            @enderror
+        </div>
+
         <button type="submit" class="btn-register" id="btn-register">
             <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
@@ -155,6 +173,10 @@
             ← Kembali ke Beranda
         </a>
     </div>
+
+    {{-- Google reCAPTCHA Script --}}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             function setupPasswordToggle(toggleId, inputId, iconId) {

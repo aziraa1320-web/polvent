@@ -38,11 +38,29 @@
             margin-bottom: 1.25rem;
             text-align: center;
         }
+        .warning-alert {
+            background: #fef3c7; border: 1px solid #fde68a;
+            color: #92400e; padding: 0.65rem 1rem;
+            border-radius: 0.5rem; font-size: 0.82rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
         .resend-btn {
             background: none; border: none; color: #0056B3; font-weight: 600; font-size: 0.875rem;
             cursor: pointer; padding: 0; text-decoration: none; display: inline;
         }
         .resend-btn:hover { text-decoration: underline; }
+        .resend-btn:disabled {
+            color: #9ca3af; cursor: not-allowed; text-decoration: none;
+        }
+        .resend-info {
+            font-size: 0.78rem; color: #64748b; margin-top: 0.5rem;
+            text-align: center;
+        }
+        .otp-timer {
+            font-size: 0.82rem; color: #dc2626; font-weight: 600;
+            text-align: center; margin-bottom: 1rem;
+        }
     </style>
 
     <div class="form-title">Verifikasi Keamanan</div>
@@ -54,6 +72,20 @@
         <div class="status-alert">{{ session('status') }}</div>
     @endif
 
+    @if(session('mail_error'))
+        <div class="warning-alert">{{ session('mail_error') }}</div>
+    @endif
+
+    @if($errors->any())
+        <div style="color:#dc2626;font-size:0.82rem;text-align:center;margin-bottom:1rem;background:#fef2f2;border:1px solid #fecaca;padding:0.65rem 1rem;border-radius:0.5rem;">
+            {{ $errors->first() }}
+        </div>
+    @endif
+
+    <div class="otp-timer" id="otp-timer" style="display:none;">
+        Kode OTP berlaku: <span id="timer-countdown"></span>
+    </div>
+
     <form method="POST" action="{{ route('otp.verify') }}">
         @csrf
 
@@ -62,7 +94,8 @@
             <input id="otp" class="form-input {{ $errors->has('otp') ? 'error' : '' }}"
                 type="text" name="otp" value="{{ old('otp') }}"
                 placeholder="000000" maxlength="6"
-                required autofocus autocomplete="one-time-code">
+                required autofocus autocomplete="one-time-code"
+                inputmode="numeric" pattern="[0-9]{6}">
             @error('otp')
                 <div class="form-error">{{ $message }}</div>
             @enderror
@@ -82,10 +115,23 @@
     <div class="form-divider">— Belum menerima kode? —</div>
     
     <div style="text-align: center;">
-        <form method="POST" action="{{ route('otp.resend') }}" style="display: inline;">
-            @csrf
-            <button type="submit" class="resend-btn">Kirim Ulang OTP</button>
-        </form>
+        @if($canResend)
+            <form method="POST" action="{{ route('otp.resend') }}" style="display: inline;">
+                @csrf
+                <button type="submit" class="resend-btn">Kirim Ulang OTP</button>
+            </form>
+            <div class="resend-info">
+                Sisa pengiriman: {{ 3 - $resendCount }}x dari 3x (dalam 15 menit)
+            </div>
+        @else
+            <button type="button" class="resend-btn" disabled>Kirim Ulang OTP</button>
+            <div class="resend-info" style="color: #dc2626;">
+                Batas pengiriman OTP tercapai (3x). 
+                @if($lockedUntil)
+                    <span id="resend-countdown"></span>
+                @endif
+            </div>
+        @endif
     </div>
 
     <div style="margin-top:1.5rem;text-align:center;">
@@ -93,4 +139,57 @@
             ← Kembali ke halaman Login
         </a>
     </div>
+
+    <script>
+    (function() {
+        // OTP countdown timer (5 menit)
+        const timerEl = document.getElementById('otp-timer');
+        const countdownEl = document.getElementById('timer-countdown');
+        
+        // Hitung dari 5 menit
+        let timeLeft = 300; // 5 menit dalam detik
+        
+        if (timerEl && countdownEl) {
+            timerEl.style.display = 'block';
+            
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                countdownEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    timerEl.innerHTML = '<span style="color:#dc2626;">Kode OTP telah kadaluarsa. Silakan kirim ulang.</span>';
+                    return;
+                }
+                timeLeft--;
+                setTimeout(updateTimer, 1000);
+            }
+            updateTimer();
+        }
+
+        // Resend lockout countdown
+        @if(!$canResend && $lockedUntil)
+        const resendCountdownEl = document.getElementById('resend-countdown');
+        if (resendCountdownEl) {
+            const lockedUntil = new Date('{{ $lockedUntil }}');
+            
+            function updateResendCountdown() {
+                const now = new Date();
+                const diff = Math.max(0, Math.floor((lockedUntil - now) / 1000));
+                
+                if (diff <= 0) {
+                    resendCountdownEl.textContent = 'Silakan refresh halaman.';
+                    return;
+                }
+                
+                const mins = Math.floor(diff / 60);
+                const secs = diff % 60;
+                resendCountdownEl.textContent = `Coba lagi dalam ${mins}:${secs.toString().padStart(2, '0')}`;
+                setTimeout(updateResendCountdown, 1000);
+            }
+            updateResendCountdown();
+        }
+        @endif
+    })();
+    </script>
 </x-guest-layout>

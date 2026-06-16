@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\LoginHistoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
+use App\Http\Controllers\Admin\PanitiaController as AdminPanitiaController;
 use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboardController;
 use App\Http\Controllers\Mahasiswa\EventController as MahasiswaEventController;
 use App\Http\Controllers\Panitia\DashboardController as PanitiaDashboardController;
@@ -73,6 +74,9 @@ Route::middleware(['auth', 'checkRole:admin'])
         // Login History
         Route::get('/login-history', [LoginHistoryController::class, 'index'])
             ->name('login-history.index');
+
+        // Manage Panitia
+        Route::resource('panitia', AdminPanitiaController::class)->except(['show', 'edit', 'update']);
     });
 
 /*
@@ -101,6 +105,9 @@ Route::middleware(['auth', 'checkRole:panitia'])
 
         Route::patch('/registrations/{registration}/reject', [RegistrationController::class, 'reject'])
             ->name('registrations.reject');
+
+        Route::delete('/registrations/{registration}', [RegistrationController::class, 'destroy'])
+            ->name('registrations.destroy');
     });
 
 /*

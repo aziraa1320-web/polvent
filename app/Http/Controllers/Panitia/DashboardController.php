@@ -13,15 +13,23 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        $panitiaId = auth()->id();
+
+        // Scope Registrations
+        $registrationsQuery = Registration::whereHas('event', function ($query) use ($panitiaId) {
+            $query->where('id_panitia', $panitiaId);
+        });
+
         $stats = [
-            'total_registrations' => Registration::count(),
-            'pending'             => Registration::where('status', 'pending')->count(),
-            'approved'            => Registration::where('status', 'approved')->count(),
-            'rejected'            => Registration::where('status', 'rejected')->count(),
-            'total_events'        => Event::count(),
+            'total_registrations' => (clone $registrationsQuery)->count(),
+            'pending'             => (clone $registrationsQuery)->where('status', 'pending')->count(),
+            'approved'            => (clone $registrationsQuery)->where('status', 'approved')->count(),
+            'rejected'            => (clone $registrationsQuery)->where('status', 'rejected')->count(),
+            'total_events'        => Event::where('id_panitia', $panitiaId)->count(),
         ];
 
-        $recentRegistrations = Registration::with(['user', 'event'])
+        $recentRegistrations = (clone $registrationsQuery)
+            ->with(['user', 'event'])
             ->latest()
             ->limit(10)
             ->get();

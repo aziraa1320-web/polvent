@@ -85,7 +85,7 @@
                 <p class="otp-code">{{ $otpCode }}</p>
             </div>
             
-            <p>Kode ini hanya berlaku selama <strong>10 menit</strong>.</p>
+            <p>Kode ini hanya berlaku selama <strong>5 menit</strong>.</p>
             
             <p class="warning">JANGAN BERIKAN KODE INI KEPADA SIAPAPUN. Tim POLVENT tidak pernah meminta kode OTP Anda.</p>
         </div>

@@ -26,13 +26,26 @@ class OtpController extends Controller
             return back()->withErrors(['email' => 'Email tidak terdaftar atau tidak memiliki akses ke portal ini.']);
         }
 
+        // Cek rate limit kirim OTP
+        if (! $user->canResendOtp()) {
+            $minutesLeft = $user->otp_resend_locked_until
+                ? $user->otp_resend_locked_until->diffInMinutes(now()) + 1
+                : 15;
+
+            return back()->withErrors([
+                'email' => "Batas pengiriman OTP tercapai. Silakan coba lagi dalam {$minutesLeft} menit.",
+            ]);
+        }
+
         $user->generateOtp();
         $user->sendOtpMail();
+        $user->incrementOtpResendCount();
 
         session([
             'otp_user_id' => $user->id,
             'otp_role' => $user->role,
             'otp_remember' => $request->boolean('remember'),
+            'otp_context' => 'login',
         ]);
 
         return redirect()->route('otp.verify');
@@ -47,7 +60,16 @@ class OtpController extends Controller
             return redirect()->route('login');
         }
 
-        return view('auth.otp-verify');
+        $userId = $request->session()->get('otp_user_id');
+        $user = User::find($userId);
+
+        $canResend = $user ? $user->canResendOtp() : false;
+        $resendCount = $user ? $user->otp_resend_count : 0;
+        $lockedUntil = ($user && $user->otp_resend_locked_until && $user->otp_resend_locked_until->isFuture())
+            ? $user->otp_resend_locked_until->toIso8601String()
+            : null;
+
+        return view('auth.otp-verify', compact('canResend', 'resendCount', 'lockedUntil'));
     }
 
     /**
@@ -67,21 +89,36 @@ class OtpController extends Controller
         $user = User::find($userId);
 
         if (! $user) {
-            $request->session()->forget(['otp_user_id', 'otp_role', 'otp_remember']);
+            $request->session()->forget(['otp_user_id', 'otp_role', 'otp_remember', 'otp_context']);
             return redirect()->route('login')->withErrors(['email' => 'User tidak ditemukan.']);
         }
 
+        // Validasi OTP — cek kode dan masa berlaku
         if ($user->otp_code !== $request->otp || $user->otp_expires_at < now()) {
             return back()->withErrors(['otp' => 'Kode OTP salah atau sudah kadaluarsa.']);
         }
 
-        // OTP is valid, clear OTP fields
+        $context = $request->session()->get('otp_context', 'login');
+
+        // OTP valid — clear OTP fields & tandai terverifikasi
         $user->update([
-            'otp_code' => null,
-            'otp_expires_at' => null,
+            'otp_code'        => null,
+            'otp_expires_at'  => null,
+            'is_otp_verified' => true,
         ]);
 
-        // Log the user in
+        // Reset OTP resend counter
+        $user->resetOtpResendCount();
+
+        // Jika dari registrasi, aktifkan akun lalu redirect ke login
+        if ($context === 'registration') {
+            $request->session()->forget(['otp_user_id', 'otp_role', 'otp_remember', 'otp_context']);
+
+            return redirect()->route('login')
+                ->with('status', 'Akun berhasil diverifikasi! Silakan login dengan email dan password Anda.');
+        }
+
+        // Jika dari login — langsung login
         $remember = $request->session()->get('otp_remember', false);
         Auth::login($user, $remember);
 
@@ -96,7 +133,7 @@ class OtpController extends Controller
 
         // Clear session data
         $role = $request->session()->get('otp_role', 'mahasiswa');
-        $request->session()->forget(['otp_user_id', 'otp_role', 'otp_remember']);
+        $request->session()->forget(['otp_user_id', 'otp_role', 'otp_remember', 'otp_context']);
         $request->session()->regenerate();
 
         // Redirect based on role
@@ -108,7 +145,7 @@ class OtpController extends Controller
     }
 
     /**
-     * Resend the OTP code.
+     * Resend the OTP code — maks 3x dalam 15 menit.
      */
     public function resend(Request $request)
     {
@@ -123,8 +160,20 @@ class OtpController extends Controller
             return redirect()->route('login');
         }
 
+        // Cek rate limit
+        if (! $user->canResendOtp()) {
+            $minutesLeft = $user->otp_resend_locked_until
+                ? $user->otp_resend_locked_until->diffInMinutes(now()) + 1
+                : 15;
+
+            return back()->withErrors([
+                'otp' => "Batas pengiriman OTP tercapai (3x). Silakan coba lagi dalam {$minutesLeft} menit.",
+            ]);
+        }
+
         $user->generateOtp();
         $user->sendOtpMail();
+        $user->incrementOtpResendCount();
 
         return back()->with('status', 'Kode OTP baru telah dikirim ke email Anda.');
     }

@@ -21,6 +21,9 @@ class User extends Authenticatable
         'nim',
         'otp_code',
         'otp_expires_at',
+        'is_otp_verified',
+        'otp_resend_count',
+        'otp_resend_locked_until',
     ];
 
     /**
@@ -29,6 +32,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'otp_code',
     ];
 
     /**
@@ -37,9 +41,11 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
-            'otp_expires_at'    => 'datetime',
+            'email_verified_at'      => 'datetime',
+            'password'               => 'hashed',
+            'otp_expires_at'         => 'datetime',
+            'otp_resend_locked_until' => 'datetime',
+            'is_otp_verified'        => 'boolean',
         ];
     }
 
@@ -101,14 +107,15 @@ class User extends Authenticatable
 
     /**
      * Generate a new 6-digit OTP code and save it.
+     * OTP berlaku 5 menit dan hanya dapat digunakan 1 kali.
      */
     public function generateOtp(): string
     {
         $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         
         $this->update([
-            'otp_code' => $code,
-            'otp_expires_at' => now()->addMinutes(10),
+            'otp_code'       => $code,
+            'otp_expires_at' => now()->addMinutes(5),
         ]);
 
         return $code;
@@ -119,6 +126,59 @@ class User extends Authenticatable
      */
     public function sendOtpMail(): void
     {
-        \Illuminate\Support\Facades\Mail::to($this->email)->send(new \App\Mail\OtpMail($this->otp_code));
+        try {
+            \Illuminate\Support\Facades\Mail::to($this->email)->send(new \App\Mail\OtpMail($this->otp_code));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Gagal mengirim email OTP ke {$this->email}: " . $e->getMessage());
+            \Illuminate\Support\Facades\Log::info("DEBUG OTP CODE untuk {$this->email}: {$this->otp_code}");
+
+            // Simpan warning di session agar view OTP dapat menginfokannya ke pengguna
+            session()->flash('mail_error', 'Gagal mengirim email OTP. Silakan periksa log sistem (laravel.log) untuk mendapatkan kode OTP Anda.');
+        }
+    }
+
+    /**
+     * Check apakah user bisa kirim ulang OTP (maks 3x dalam 15 menit).
+     */
+    public function canResendOtp(): bool
+    {
+        // Jika locked, cek apakah lockout sudah expired
+        if ($this->otp_resend_locked_until && $this->otp_resend_locked_until->isFuture()) {
+            return false;
+        }
+
+        // Reset counter jika lock sudah expired
+        if ($this->otp_resend_locked_until && $this->otp_resend_locked_until->isPast()) {
+            $this->update([
+                'otp_resend_count'       => 0,
+                'otp_resend_locked_until' => null,
+            ]);
+        }
+
+        return $this->otp_resend_count < 3;
+    }
+
+    /**
+     * Increment OTP resend counter dan lock jika sudah 3x.
+     */
+    public function incrementOtpResendCount(): void
+    {
+        $newCount = $this->otp_resend_count + 1;
+
+        $this->update([
+            'otp_resend_count'       => $newCount,
+            'otp_resend_locked_until' => $newCount >= 3 ? now()->addMinutes(15) : null,
+        ]);
+    }
+
+    /**
+     * Reset OTP resend counter setelah OTP berhasil diverifikasi.
+     */
+    public function resetOtpResendCount(): void
+    {
+        $this->update([
+            'otp_resend_count'       => 0,
+            'otp_resend_locked_until' => null,
+        ]);
     }
 }

@@ -29,24 +29,30 @@ Route::middleware('guest')->group(function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('login', [AuthenticatedSessionController::class, 'store'])
+        ->middleware('throttle:5,1');
 
     Route::get('portal-admin', [AuthenticatedSessionController::class, 'createAdmin'])
         ->name('admin.login');
 
-    Route::post('portal-admin', [AuthenticatedSessionController::class, 'storeAdmin']);
+    Route::post('portal-admin', [AuthenticatedSessionController::class, 'storeAdmin'])
+        ->middleware('throttle:5,1');
 
     Route::get('portal-panitia', [AuthenticatedSessionController::class, 'createPanitia'])
         ->name('panitia.login');
 
-    Route::post('portal-panitia', [AuthenticatedSessionController::class, 'storePanitia']);
+    Route::post('portal-panitia', [AuthenticatedSessionController::class, 'storePanitia'])
+        ->middleware('throttle:5,1');
 
     Route::post('otp/request', [\App\Http\Controllers\Auth\OtpController::class, 'requestOtp'])
+        ->middleware('throttle:5,1')
         ->name('otp.request');
     Route::get('otp/verify', [\App\Http\Controllers\Auth\OtpController::class, 'show'])
         ->name('otp.verify');
-    Route::post('otp/verify', [\App\Http\Controllers\Auth\OtpController::class, 'verify']);
+    Route::post('otp/verify', [\App\Http\Controllers\Auth\OtpController::class, 'verify'])
+        ->middleware('throttle:10,1');
     Route::post('otp/resend', [\App\Http\Controllers\Auth\OtpController::class, 'resend'])
+        ->middleware('throttle:3,1')
         ->name('otp.resend');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])

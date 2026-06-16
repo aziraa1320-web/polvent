@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\RecaptchaService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,8 +25,7 @@ class RegisteredUserController extends Controller
 
     /**
      * Handle an incoming registration request.
-     * After registration, redirect to login page (do NOT auto-login).
-     * The user must log in manually so that OTP is sent to their email.
+     * Setelah registrasi: buat OTP, kirim ke email, redirect ke halaman verifikasi OTP.
      *
      * @throws ValidationException
      */
@@ -35,16 +35,37 @@ class RegisteredUserController extends Controller
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'g-recaptcha-response' => ['required', 'string'],
+        ], [
+            'g-recaptcha-response.required' => 'Verifikasi reCAPTCHA gagal. Silakan coba lagi.',
         ]);
 
-        User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
+        // Validasi reCAPTCHA via Google API
+        if (! RecaptchaService::verify($request->input('g-recaptcha-response'))) {
+            throw ValidationException::withMessages([
+                'g-recaptcha-response' => 'Verifikasi reCAPTCHA gagal. Silakan coba lagi.',
+            ]);
+        }
+
+        $user = User::create([
+            'name'            => $request->name,
+            'email'           => $request->email,
+            'password'        => Hash::make($request->password),
+            'is_otp_verified' => false,
         ]);
 
-        // Redirect to login — user must log in manually so OTP is triggered.
-        return redirect()->route('login')
-            ->with('status', 'Akun berhasil dibuat! Silakan login dengan email dan password Anda.');
+        // Generate OTP dan kirim ke email pengguna
+        $user->generateOtp();
+        $user->sendOtpMail();
+
+        // Simpan user_id di session untuk verifikasi OTP
+        session([
+            'otp_user_id'     => $user->id,
+            'otp_context'     => 'registration',
+            'otp_role'        => 'mahasiswa',
+        ]);
+
+        return redirect()->route('otp.verify')
+            ->with('status', 'Akun berhasil dibuat! Kode OTP telah dikirim ke email Anda. Silakan verifikasi.');
     }
 }

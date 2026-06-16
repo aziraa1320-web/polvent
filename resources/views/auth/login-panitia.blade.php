@@ -49,29 +49,8 @@
     .error-alert { color: #dc2626; font-size: 0.85rem; text-align: center; margin-bottom: 1rem; background: #fef2f2; border: 1px solid #fecaca; padding: 0.65rem 1rem; border-radius: 0.5rem; }
 
     .security-label { font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem; display: block; }
-    .recaptcha-box {
-        display: flex; align-items: center; justify-content: space-between;
-        background: #f9f9f9; border: 1px solid #d1d5db; border-radius: 4px;
-        padding: 12px 14px; height: 74px; cursor: pointer; transition: border-color 0.2s;
-        margin-bottom: 1.25rem; user-select: none;
-    }
-    .recaptcha-box:hover { border-color: #9ca3af; }
-    .recaptcha-left-area { display: flex; align-items: center; gap: 14px; }
-    .rc-checkbox {
-        width: 26px; height: 26px; border: 2px solid #bdbdbd; border-radius: 2px;
-        background: #fff; display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0; transition: border-color 0.2s;
-    }
-    .rc-checkbox.verified { border-color: #4caf50; }
-    .rc-label { font-size: 14px; color: #3c3c3c; font-weight: 400; }
-    .recaptcha-right-area { display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
-    .rc-logo-text { font-size: 9px; color: #9e9e9e; font-weight: 600; letter-spacing: 0.04em; }
-    .rc-links { font-size: 8px; color: #9e9e9e; }
-    .rc-links a { color: #757575; text-decoration: none; }
-    .rc-links a:hover { text-decoration: underline; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .rc-spinner { width: 18px; height: 18px; border: 2.5px solid #e5e7eb; border-top-color: #059669; border-radius: 50%; animation: spin 0.75s linear infinite; }
-
+    .recaptcha-container { margin-bottom: 1.25rem; }
+    .recaptcha-error { color: #dc2626; font-size: 0.8rem; margin-top: 0.35rem; }
 
 </style>
 
@@ -130,73 +109,29 @@
         </label>
     </div>
 
-    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+    {{-- Google reCAPTCHA v2 --}}
     <span class="security-label">Verifikasi Keamanan</span>
-    <div class="recaptcha-box" id="rc-box">
-        <div class="recaptcha-left-area">
-            <div class="rc-checkbox" id="rc-checkbox"></div>
-            <span class="rc-label">Saya bukan robot</span>
-        </div>
-        <div class="recaptcha-right-area">
-            <svg width="32" height="32" viewBox="0 0 64 64" fill="none">
-                <path d="M32 4L8 14v18c0 15.46 10.24 29.91 24 33.86C45.76 61.91 56 47.46 56 32V14L32 4z" fill="#059669" opacity="0.15"/>
-                <path d="M32 4L8 14v18c0 15.46 10.24 29.91 24 33.86C45.76 61.91 56 47.46 56 32V14L32 4z" stroke="#059669" stroke-width="3" fill="none"/>
-                <path d="M23 32c0-4.97 4.03-9 9-9s9 4.03 9 9" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="32" cy="32" r="4" fill="#34A853"/>
-                <path d="M41 32c0 4.97-4.03 9-9 9s-9-4.03-9-9" stroke="#FBBC05" stroke-width="3" stroke-linecap="round"/>
-            </svg>
-            <div class="rc-logo-text">reCAPTCHA</div>
-            <div class="rc-links">
-                <a href="#" onclick="event.preventDefault()">Privasi</a> -
-                <a href="#" onclick="event.preventDefault()">Persyaratan</a>
-            </div>
-        </div>
+    <div class="recaptcha-container">
+        <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+        @error('g-recaptcha-response')
+            <div class="recaptcha-error">{{ $message }}</div>
+        @enderror
     </div>
-
-
 
     <button type="submit" class="btn-submit">Masuk sebagai Panitia</button>
 </form>
 
+{{-- Google reCAPTCHA Script --}}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <script>
 (function () {
-    let verified = false;
-
     const pwdInput = document.getElementById('password');
     document.getElementById('togglePwd').addEventListener('click', () => {
         const isPwd = pwdInput.type === 'password';
         pwdInput.type = isPwd ? 'text' : 'password';
         document.getElementById('eye-show').style.display = isPwd ? 'none' : 'block';
         document.getElementById('eye-hide').style.display = isPwd ? 'block' : 'none';
-    });
-
-    const rcBox = document.getElementById('rc-box');
-    const rcCheckbox = document.getElementById('rc-checkbox');
-    const answerInput = document.getElementById('g-recaptcha-response');
-    const loginForm = document.getElementById('login-form');
-
-    function setSpinner() { rcCheckbox.innerHTML = '<div class="rc-spinner"></div>'; }
-    function setCheckmark() {
-        rcCheckbox.classList.add('verified');
-        rcCheckbox.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-    }
-
-    rcBox.addEventListener('click', () => {
-        if (verified) return;
-        setSpinner();
-        setTimeout(() => {
-            verified = true;
-            answerInput.value = 'verified';
-            setCheckmark();
-        }, 800);
-    });
-
-    loginForm.addEventListener('submit', (e) => {
-        if (!verified) {
-            e.preventDefault();
-            rcBox.style.border = '1.5px solid #dc2626';
-            setTimeout(() => { rcBox.style.border = ''; }, 2000);
-        }
     });
 })();
 </script>

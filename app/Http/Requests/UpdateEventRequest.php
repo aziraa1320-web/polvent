@@ -7,12 +7,12 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateEventRequest extends FormRequest
 {
     /**
-     * Only admin can update events.
+     * Only admin and panitia can update events.
      */
-    public function authorize(): bool
-    {
-        return $this->user()->isAdmin();
-    }
+     public function authorize(): bool
+     {
+         return $this->user()->isAdmin() || $this->user()->isPanitia();
+     }
 
     /**
      * Validation rules.

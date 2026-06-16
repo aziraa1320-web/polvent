@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use App\Models\LoginHistory;
 use App\Models\User;
+use App\Services\RecaptchaService;
 
 class LoginRequest extends FormRequest
 {
@@ -30,9 +31,19 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email'    => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
             'g-recaptcha-response' => ['required', 'string'],
+        ];
+    }
+
+    /**
+     * Custom validation messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'g-recaptcha-response.required' => 'Verifikasi reCAPTCHA gagal. Silakan coba lagi.',
         ];
     }
 
@@ -45,19 +56,19 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        // Mock reCAPTCHA validation (simulating standard security)
-        if ($this->input('g-recaptcha-response') !== 'verified') {
+        // Validasi reCAPTCHA via Google API
+        if (! RecaptchaService::verify($this->input('g-recaptcha-response'))) {
             RateLimiter::hit($this->throttleKey());
             
             LoginHistory::create([
-                'email' => $this->input('email'),
+                'email'      => $this->input('email'),
                 'ip_address' => $this->ip(),
                 'user_agent' => $this->userAgent(),
-                'status' => 'failed',
+                'status'     => 'failed',
             ]);
 
             throw ValidationException::withMessages([
-                'g-recaptcha-response' => 'Verifikasi keamanan gagal.',
+                'g-recaptcha-response' => 'Verifikasi reCAPTCHA gagal. Silakan coba lagi.',
             ]);
         }
 
@@ -65,10 +76,10 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             LoginHistory::create([
-                'email' => $this->input('email'),
+                'email'      => $this->input('email'),
                 'ip_address' => $this->ip(),
                 'user_agent' => $this->userAgent(),
-                'status' => 'failed',
+                'status'     => 'failed',
             ]);
 
             throw ValidationException::withMessages([
@@ -76,9 +87,33 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user = User::where('email', $this->input('email'))->first();
+
+        // Cek apakah akun sudah terverifikasi OTP
+        if ($user && !$user->is_otp_verified) {
+            session([
+                'otp_user_id' => $user->id,
+                'otp_context' => 'registration',
+                'otp_role'    => $user->role,
+            ]);
+
+            if ($user->canResendOtp()) {
+                $user->generateOtp();
+                $user->sendOtpMail();
+                $user->incrementOtpResendCount();
+                $message = 'Akun Anda belum diverifikasi. Kode OTP baru telah dikirim ke email Anda.';
+            } else {
+                $message = 'Akun Anda belum diverifikasi. Batas pengiriman OTP tercapai. Silakan masukkan kode OTP Anda atau tunggu lockout selesai.';
+            }
+
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                redirect()->route('otp.verify')->with('status', $message)
+            );
+        }
+
         RateLimiter::clear($this->throttleKey());
 
-        return User::where('email', $this->input('email'))->first();
+        return $user;
     }
 
     /**
