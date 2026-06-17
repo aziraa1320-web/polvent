@@ -24,6 +24,7 @@ class UpdateEventRequest extends FormRequest
             'description' => ['required', 'string', 'min:20', 'max:5000'],
             'event_date'  => ['required', 'date'],
             'quota'       => ['required', 'integer', 'min:1', 'max:10000'],
+            'location'    => ['nullable', 'string', 'max:255'],
             'poster'      => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }

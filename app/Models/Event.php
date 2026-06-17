@@ -17,6 +17,7 @@ class Event extends Model
         'description',
         'event_date',
         'quota',
+        'location',
         'poster',
         'created_by',
         'id_panitia',

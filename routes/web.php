@@ -11,6 +11,7 @@ use App\Http\Controllers\Panitia\DashboardController as PanitiaDashboardControll
 use App\Http\Controllers\Panitia\EventController as PanitiaEventController;
 use App\Http\Controllers\Panitia\RegistrationController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $events = \App\Models\Event::upcoming()->limit(6)->get();
+    // Tampilkan hanya event yang masih ada kuota (approved < quota)
+    $events = \App\Models\Event::upcoming()
+        ->withCount('approvedRegistrations')
+        ->having(\Illuminate\Support\Facades\DB::raw('quota - approved_registrations_count'), '>', 0)
+        ->limit(6)
+        ->get();
+
     $stats  = [
         'total_events'    => \App\Models\Event::count(),
         'total_mahasiswa' => \App\Models\User::where('role', 'mahasiswa')->count(),
@@ -108,6 +115,10 @@ Route::middleware(['auth', 'checkRole:panitia'])
 
         Route::delete('/registrations/{registration}', [RegistrationController::class, 'destroy'])
             ->name('registrations.destroy');
+
+        // Profile
+        Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     });
 
 /*

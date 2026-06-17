@@ -518,36 +518,6 @@
                     </div>
                 </div>
                 @endforeach
-                {{-- Duplicate slides for infinite loop feel --}}
-                @foreach($events as $event)
-                <div class="slider-card">
-                    <div class="sc-image">
-                        @if($event->poster)
-                            <img src="{{ Storage::url($event->poster) }}" alt="{{ $event->title }}">
-                        @else
-                            <div class="sc-image-placeholder">
-                                <svg width="52" height="52" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                            </div>
-                        @endif
-                        <div class="sc-date-badge">
-                            <span class="sc-date-day">{{ $event->event_date->format('d') }}</span>
-                            <span class="sc-date-mon">{{ $event->event_date->format('M') }}</span>
-                        </div>
-                        <div class="sc-overlay"></div>
-                    </div>
-                    <div class="sc-body">
-                        <h3 class="sc-title">{{ $event->title }}</h3>
-                        <p class="sc-desc">{{ Str::limit($event->description, 90) }}</p>
-                        <div class="sc-footer">
-                            <div class="sc-quota">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                <span>Kuota: <strong>{{ $event->quota }}</strong></span>
-                            </div>
-                            <a href="{{ route('login') }}" class="sc-btn">Lihat Detail →</a>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
             </div>
 
             <!-- Arrow buttons -->
@@ -723,10 +693,22 @@
         const track = document.getElementById('sliderTrack');
         if (!track) return;
 
-        const cards = track.querySelectorAll('.slider-card');
-        const totalReal = cards.length / 2; // Because we duplicated
+        const originalCards = Array.from(track.querySelectorAll('.slider-card'));
+        const totalReal = originalCards.length;
+        if (totalReal === 0) return;
+
+        // JS-based cloning for infinite loop (no server-side duplication)
+        if (totalReal > 1) {
+            originalCards.forEach(card => {
+                const clone = card.cloneNode(true);
+                clone.setAttribute('aria-hidden', 'true');
+                track.appendChild(clone);
+            });
+        }
+
+        const allCards = track.querySelectorAll('.slider-card');
         const dots = document.querySelectorAll('.slider-dot');
-        const cardWidth = cards[0].offsetWidth + 24; // width + gap (1.5rem=24px)
+        const cardWidth = allCards[0].offsetWidth + 24; // width + gap (1.5rem=24px)
 
         let currentIndex = 0;
         let autoTimer = null;
@@ -755,15 +737,12 @@
         function next() {
             currentIndex++;
             if (currentIndex >= totalReal * 2) {
-                // Jump back to start without animation
                 goTo(0, false);
                 requestAnimationFrame(() => requestAnimationFrame(() => goTo(1)));
                 return;
             }
-            // Seamless infinite: when crossing into duplicates, quietly reset
             if (currentIndex === totalReal) {
                 goTo(currentIndex);
-                // After animation, silently jump to real start
                 setTimeout(() => { goTo(0, false); }, 560);
                 return;
             }
@@ -772,7 +751,6 @@
 
         function prev() {
             if (currentIndex <= 0) {
-                // Jump to the duplicate set end
                 goTo(totalReal, false);
                 requestAnimationFrame(() => requestAnimationFrame(() => goTo(totalReal - 1)));
                 return;

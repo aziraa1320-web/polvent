@@ -110,7 +110,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background: #f8fafc;
+            background: #eef2f6;
         }
 
         /* ===================== TOPBAR ===================== */
@@ -162,11 +162,11 @@
             background: white;
             border-radius: 1rem;
             padding: 1.375rem;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
-            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border: 1px solid #cbd5e1;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.09); }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
         .stat-card .stat-icon {
             width: 48px; height: 48px;
             border-radius: 0.875rem;
@@ -181,13 +181,13 @@
         .table-wrapper {
             background: white;
             border-radius: 1rem;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
-            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border: 1px solid #cbd5e1;
             overflow: hidden;
         }
         .table-header {
             padding: 1.125rem 1.5rem;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid #cbd5e1;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -205,13 +205,13 @@
             text-transform: uppercase;
             letter-spacing: 0.06em;
             background: #f8fafc;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 2px solid #cbd5e1;
         }
         table td {
             padding: 0.875rem 1.25rem;
             font-size: 0.875rem;
             color: #374151;
-            border-bottom: 1px solid #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
             vertical-align: middle;
         }
         table tr:last-child td { border-bottom: none; }
@@ -272,22 +272,22 @@
         .alert-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
 
         /* ===================== FORM STYLES ===================== */
-        .form-card { background: white; border-radius: 1rem; box-shadow: 0 1px 6px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; overflow: hidden; }
-        .form-card-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; }
+        .form-card { background: white; border-radius: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.06); border: 1px solid #cbd5e1; overflow: hidden; }
+        .form-card-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: space-between; }
         .form-card-header h3 { font-weight: 700; font-size: 0.975rem; color: #1e293b; }
         .form-card-body { padding: 1.5rem; }
         .form-group { margin-bottom: 1.25rem; }
         .form-label { display: block; font-weight: 600; font-size: 0.845rem; color: #374151; margin-bottom: 0.4rem; }
         .form-input {
             width: 100%; padding: 0.65rem 0.875rem;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid #cbd5e1;
             border-radius: 0.5rem;
             font-size: 0.875rem; color: #1e293b;
             outline: none; transition: border-color 0.2s, box-shadow 0.2s;
-            background: white;
+            background: #f8fafc;
         }
-        .form-input:focus { border-color: #0056B3; box-shadow: 0 0 0 3px rgba(0,86,179,0.1); }
-        .form-input.is-invalid { border-color: #dc2626; }
+        .form-input:focus { border-color: #0056B3; box-shadow: 0 0 0 3px rgba(0,86,179,0.15); background: white; }
+        .form-input.is-invalid { border-color: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,0.08); }
         .form-error { color: #dc2626; font-size: 0.78rem; margin-top: 0.3rem; }
         .form-hint { font-size: 0.76rem; color: #94a3b8; margin-top: 0.25rem; }
         .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -296,7 +296,8 @@
         .event-card {
             background: white;
             border-radius: 1rem;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
             overflow: hidden;
             transition: all 0.25s;
         }
@@ -452,6 +453,12 @@
                     Kelola Peserta
                 </a>
 
+                <a href="{{ route('panitia.profile.edit') }}"
+                   class="nav-item {{ request()->routeIs('panitia.profile.edit') ? 'active' : '' }}">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    Edit Profil
+                </a>
+
             {{-- ========== MAHASISWA NAV ========== --}}
             @else
                 <div class="nav-section-label">Mahasiswa</div>
@@ -479,9 +486,13 @@
         <!-- Sidebar user footer -->
         <div class="sidebar-footer">
             <div class="sidebar-user-card">
-                <div class="user-avatar" style="width:34px;height:34px;font-size:0.8rem;flex-shrink:0;">
-                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                </div>
+                @if(auth()->user()->profile_photo)
+                    <img src="{{ auth()->user()->profile_photo_url }}" alt="Profile" style="width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+                @else
+                    <div class="user-avatar" style="width:34px;height:34px;font-size:0.8rem;flex-shrink:0;">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                @endif
                 <div style="flex:1;min-width:0;">
                     <div class="name">{{ auth()->user()->name }}</div>
                     <div class="role">{{ ucfirst(auth()->user()->role) }}</div>
@@ -519,7 +530,11 @@
             <div class="topbar-right">
                 <span class="role-badge {{ auth()->user()->role }}">{{ ucfirst(auth()->user()->role) }}</span>
                 <div style="display:flex;align-items:center;gap:0.5rem;">
-                    <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
+                    @if(auth()->user()->profile_photo)
+                        <img src="{{ auth()->user()->profile_photo_url }}" alt="Profile" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                    @else
+                        <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
+                    @endif
                     <div class="user-info" style="display:none;" id="topbarUserInfo">
                         <div class="name">{{ auth()->user()->name }}</div>
                         <div class="sub">{{ auth()->user()->email }}</div>
@@ -556,7 +571,7 @@
         function checkMobile() {
             menuBtn.style.display = window.innerWidth <= 768 ? 'block' : 'none';
             if (window.innerWidth >= 992) {
-                document.getElementById('topbarUserInfo').style.display = 'flex';
+                document.getElementById('topbarUserInfo').style.display = 'block';
             }
         }
         checkMobile();
