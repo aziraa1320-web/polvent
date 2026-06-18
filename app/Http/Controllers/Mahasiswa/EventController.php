@@ -41,7 +41,9 @@ class EventController extends Controller
             ->where('event_id', $event->id)
             ->first();
 
-        return view('mahasiswa.events.show', compact('event', 'userRegistration'));
+        $user = auth()->user();
+
+        return view('mahasiswa.events.show', compact('event', 'userRegistration', 'user'));
     }
 
     /**

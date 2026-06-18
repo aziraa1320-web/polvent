@@ -187,24 +187,170 @@
         .btn-card:hover { background: var(--navy); color: white; }
 
         /* ======= FEATURES SECTION ======= */
-        .features-wrap { background: linear-gradient(135deg, var(--navy), #1e293b); color: white; padding: 6rem 0; }
-        .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-top: 4rem; }
+        .features-wrap { background: linear-gradient(135deg, var(--navy), #1e293b); color: white; padding: 4rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-top: 3rem; }
         .feat-item { padding: 2rem; background: rgba(255,255,255,0.03); border-radius: 24px; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s; }
         .feat-item:hover { transform: translateY(-5px); background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
         .feat-icon { width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1.5rem; }
         .feat-item h3 { font-size: 1.25rem; margin-bottom: 1rem; font-family: 'Outfit'; }
         .feat-item p { color: #94a3b8; font-size: 0.95rem; line-height: 1.6; }
 
-        /* ======= FOOTER ======= */
-        footer { background: #ffffff; color: #64748b; padding: 5rem 2rem 2rem; border-top: 1px solid #e2e8f0; }
-        .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; margin-bottom: 4rem; }
-        .footer-brand h2 { color: var(--navy); font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-family: 'Outfit'; }
-        .footer-brand p { font-size: 0.95rem; line-height: 1.6; max-width: 350px; color: #64748b; }
+        /* ======= FOOTER & FAQ ======= */
+        .footer-container {
+            background: #f8fafc;
+            padding: 4rem 2rem 2rem;
+            position: relative;
+        }
+        
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem; }
+        .footer-brand p { font-size: 0.95rem; line-height: 1.6; max-width: 350px; color: #64748b; margin-top: 1rem; }
         .footer-title { color: var(--navy); font-weight: 700; font-family: 'Outfit'; font-size: 1.1rem; margin-bottom: 1.5rem; }
         .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
         .footer-links a { color: #64748b; transition: color 0.2s; font-size: 0.9rem; }
-        .footer-links a:hover { color: var(--primary); }
-        .footer-bottom { max-width: 1200px; margin: 0 auto; text-align: center; padding-top: 2rem; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #94a3b8; }
+        .footer-links a:hover { color: var(--primary); transform: translateX(4px); display: inline-block; }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #94a3b8; }
+        
+        /* ======= FLOATING FAQ BUTTON ======= */
+        .fab-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        .fab-menu {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(15,40,92,0.18);
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+            display: flex;
+            flex-direction: column;
+            width: 270px;
+            transform: scale(0.95);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform-origin: bottom right;
+            border: 1px solid #e2e8f0;
+        }
+        .fab-menu.active {
+            transform: scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+        .fab-item {
+            padding: 0.85rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: background 0.2s;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+        .fab-item:hover { background: #f0f4ff; color: var(--navy); }
+        .fab-item-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e8eef7;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .fab-item-icon svg { width: 16px; height: 16px; }
+        .fab-item:hover .fab-item-icon { background: var(--navy); color: white; }
+        
+        .fab-button {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: var(--navy);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(15, 40, 92, 0.4);
+            cursor: pointer;
+            border: none;
+            transition: all 0.25s ease;
+        }
+        .fab-button:hover { transform: scale(1.08); background: var(--primary-hover); box-shadow: 0 8px 24px rgba(15, 40, 92, 0.5); }
+        .fab-button svg { width: 28px; height: 28px; }
+        
+        /* ======= FAQ MODAL ======= */
+        .faq-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 40, 92, 0.55); backdrop-filter: blur(6px);
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: all 0.3s;
+        }
+        .faq-modal-overlay.active { opacity: 1; visibility: visible; }
+        .faq-modal-content {
+            background: white; border-radius: 24px; padding: 2.5rem;
+            width: 92%; max-width: 680px; transform: translateY(20px);
+            transition: all 0.3s; max-height: 88vh; overflow-y: auto;
+            box-shadow: 0 30px 60px rgba(15,40,92,0.2);
+        }
+        .faq-modal-overlay.active .faq-modal-content { transform: translateY(0); }
+        .faq-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .faq-modal-title { font-size: 1.4rem; font-weight: 800; color: var(--navy); font-family: 'Outfit'; }
+        .faq-modal-close { background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748b; transition: all 0.2s; }
+        .faq-modal-close:hover { background: var(--navy); color: white; }
+        
+        /* Tabs */
+        /* Accordion FAQ */
+        .accordion-item { border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 0.5rem; }
+        .accordion-trigger {
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+            padding: 0.9rem 1.1rem; background: #f8fafc; border: none; cursor: pointer;
+            font-weight: 600; font-size: 0.875rem; color: var(--navy); font-family: inherit;
+            text-align: left; transition: background 0.2s;
+        }
+        .accordion-trigger:hover { background: #eef2ff; }
+        .accordion-trigger.open { background: #eef2ff; color: var(--primary); }
+        .accordion-arrow { width: 18px; height: 18px; flex-shrink: 0; transition: transform 0.25s ease; color: #94a3b8; }
+        .accordion-trigger.open .accordion-arrow { transform: rotate(180deg); color: var(--navy); }
+        .accordion-body {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.2s;
+            background: white; font-size: 0.855rem; color: #475569; line-height: 1.65;
+        }
+        .accordion-body.open { max-height: 200px; padding: 0.85rem 1.1rem 1rem; }
+        
+        .guide-steps { display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.5rem; }
+        .guide-step {
+            display: flex; align-items: flex-start; gap: 0.85rem;
+            padding: 0.85rem 1rem; background: #f0f4ff;
+            border-radius: 12px; border-left: 3px solid var(--navy);
+        }
+        .guide-step-num {
+            width: 26px; height: 26px; border-radius: 50%; background: var(--navy);
+            color: white; font-weight: 800; font-size: 0.78rem;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .guide-step-text { font-size: 0.855rem; color: #1e293b; line-height: 1.5; }
+        .guide-step-text strong { color: var(--navy); }
+        
+        .faq-section-title { font-size: 0.95rem; font-weight: 800; color: var(--navy); font-family: 'Outfit'; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e8eef7; }
+        .faq-accordion-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        
+        @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+        }
 
         /* ======= EVENT SLIDER ======= */
         .slider-outer {
@@ -373,9 +519,13 @@
                     };
                 @endphp
                 <a href="{{ $dashboardUrl }}" class="btn-nav-user" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; padding: 0.35rem 0.75rem; border-radius: 999px; background: rgba(79, 70, 229, 0.1); border: 1px solid rgba(79, 70, 229, 0.2); transition: all 0.3s;">
-                    <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                    </div>
+                    @if(auth()->user()->profile_photo)
+                        <img src="{{ Storage::url(auth()->user()->profile_photo) }}" alt="Profile" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--primary);">
+                    @else
+                        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">
+                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                        </div>
+                    @endif
                     <span style="font-weight: 600; color: var(--navy); font-size: 0.9rem;">{{ auth()->user()->name }}</span>
                 </a>
                 
@@ -470,8 +620,8 @@
         </div>
     </div>
 
-    <!-- UPCOMING EVENTS - AUTO SLIDER -->
-    <section style="padding: 6rem 0; background: var(--bg-light);" id="events">
+    <!-- UPCOMING EVENTS -->
+    <section style="padding: 4rem 0 2.5rem 0; background: var(--bg-light); border-bottom: 1px solid #cbd5e1;" id="events">
         <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
             <div class="section-header">
                 <div>
@@ -584,7 +734,7 @@
     </section>
 
     <!-- ABOUT US / TENTANG KAMI -->
-    <section id="about" style="background: var(--navy); color: white; position: relative; overflow: hidden; padding: 8rem 2rem; margin-top: 4rem;">
+    <section id="about" style="background: var(--navy); color: white; position: relative; overflow: hidden; padding: 4rem 2rem 8rem 2rem; margin-top: 0;">
         <!-- Decorative Background Elements -->
         <div style="position: absolute; top: -20%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(96,165,250,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%;"></div>
         <div style="position: absolute; bottom: -20%; left: -10%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(52,211,153,0.1) 0%, rgba(255,255,255,0) 70%); border-radius: 50%;"></div>
@@ -642,50 +792,164 @@
     </section>
 
     <!-- FOOTER -->
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;height:54px;">
-                    <img src="{{ asset('images/logo-polbeng.png') }}" alt="Polbeng" style="height:100%;width:auto;object-fit:contain;">
-                    <div style="width: 2px; height: 100%; background: #e2e8f0;"></div>
-                    <img src="{{ asset('images/logo-polvent.png') }}" alt="Polvent" style="height:220%;width:auto;object-fit:contain;">
+    <footer class="footer-container">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div style="display:flex;align-items:center;gap:1rem;height:54px;">
+                        <img src="{{ asset('images/logo-polbeng.png') }}" alt="Polbeng" style="height:100%;width:auto;object-fit:contain;">
+                        <div style="width: 2px; height: 100%; background: #e2e8f0;"></div>
+                        <img src="{{ asset('images/logo-polvent.png') }}" alt="Polvent" style="height:220%;width:auto;object-fit:contain;">
+                    </div>
+                    <p>
+                        Pusat informasi dan pendaftaran seluruh event kampus Politeknik Negeri Bengkalis terintegrasi. Lebih mudah, cepat, dan 100% aman.
+                    </p>
+                    <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                        <a href="#" style="width: 36px; height: 36px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: var(--navy); transition: all 0.2s;"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+                        <a href="#" style="width: 36px; height: 36px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: var(--navy); transition: all 0.2s;"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.20 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+                    </div>
                 </div>
-                <p style="font-size: 1rem; color: #475569; max-width: 400px; line-height: 1.7;">
-                    Pusat informasi dan pendaftaran seluruh event kampus Politeknik Negeri Bengkalis terintegrasi. Lebih mudah, cepat, dan 100% aman.
-                </p>
-                <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
-                    <!-- Social placeholders -->
-                    <a href="#" style="width: 36px; height: 36px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: var(--primary); transition: all 0.2s;"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
-                    <a href="#" style="width: 36px; height: 36px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: var(--primary); transition: all 0.2s;"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.20 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+                <div>
+                    <h4 class="footer-title">Jelajahi</h4>
+                    <ul class="footer-links">
+                        <li><a href="#events">Daftar Event</a></li>
+                        <li><a href="#features">Keunggulan Platform</a></li>
+                        <li><a href="{{ route('login') }}">Portal Mahasiswa</a></li>
+                        <li><a href="{{ route('panitia.login') }}">Akses Panitia</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Hubungi Kami</h4>
+                    <ul class="footer-links">
+                        <li style="display:flex;align-items:center;gap:0.5rem;color:#64748b;font-size:0.9rem;">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            Sungai Alam, Bengkalis
+                        </li>
+                        <li style="display:flex;align-items:center;gap:0.5rem;color:#64748b;font-size:0.9rem;">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            info@polbeng.ac.id
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div>
-                <h4 class="footer-title">Jelajahi</h4>
-                <ul class="footer-links">
-                    <li><a href="#events">Daftar Event</a></li>
-                    <li><a href="#features">Keunggulan Platform</a></li>
-                    <li><a href="{{ route('login') }}">Portal Mahasiswa</a></li>
-                    <li><a href="{{ route('panitia.login') }}">Akses Panitia</a></li>
-                </ul>
+            <div class="footer-bottom">
+                &copy; {{ date('Y') }} Platform POLVENT - Politeknik Negeri Bengkalis. All rights reserved.
             </div>
-            <div>
-                <h4 class="footer-title">Hubungi Kami</h4>
-                <ul class="footer-links">
-                    <li style="display:flex;align-items:center;gap:0.5rem;">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        Sungai Alam, Bengkalis
-                    </li>
-                    <li style="display:flex;align-items:center;gap:0.5rem;">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                        info@polbeng.ac.id
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            &copy; {{ date('Y') }} Platform POLVENT - Politeknik Negeri Bengkalis. All rights reserved.
         </div>
     </footer>
+
+    <!-- FAB CONTAINER -->
+    <div class="fab-container">
+        <div class="fab-menu" id="fabMenu">
+            <button class="fab-item" onclick="openFaqModal()">
+                <span>FAQ / Pertanyaan</span>
+                <div class="fab-item-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
+            </button>
+            <a href="mailto:masnidarakmi@gmail.com" class="fab-item">
+                <span>Email Admin</span>
+                <div class="fab-item-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+            </a>
+            <a href="#events" class="fab-item" onclick="toggleFabMenu()">
+                <span>Panduan Pendaftaran</span>
+                <div class="fab-item-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div>
+            </a>
+            <a href="mailto:masnidarakmi@gmail.com?subject=Laporan Kendala" class="fab-item">
+                <span>Laporan Kendala</span>
+                <div class="fab-item-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg></div>
+            </a>
+        </div>
+        <button class="fab-button" onclick="toggleFabMenu()">
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+        </button>
+    </div>
+
+    <!-- FAQ MODAL -->
+    <div class="faq-modal-overlay" id="faqModal" onclick="closeFaqModal(event)">
+        <div class="faq-modal-content" onclick="event.stopPropagation()">
+            <div class="faq-modal-header">
+                <h3 class="faq-modal-title">📖 Panduan Mahasiswa POLVENT</h3>
+                <button class="faq-modal-close" onclick="closeFaqModal()">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- PANDUAN MAHASISWA -->
+            <div class="faq-section-title">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Langkah-Langkah Penggunaan
+            </div>
+            <div class="guide-steps">
+                <div class="guide-step">
+                    <div class="guide-step-num">1</div>
+                    <div class="guide-step-text"><strong>Daftar Akun:</strong> Klik "Daftar Akun Baru", isi NIM, Nama, Email & Password. Verifikasi OTP dikirim ke email, cukup sekali saja.</div>
+                </div>
+                <div class="guide-step">
+                    <div class="guide-step-num">2</div>
+                    <div class="guide-step-text"><strong>Login:</strong> Masukkan Email & Password. Setelah verifikasi OTP selesai, login langsung tanpa OTP lagi.</div>
+                </div>
+                <div class="guide-step">
+                    <div class="guide-step-num">3</div>
+                    <div class="guide-step-text"><strong>Lengkapi Profil:</strong> Buka menu "Profil Saya", isi data diri (Jurusan, Angkatan, Nomor HP) dan unggah foto profil.</div>
+                </div>
+                <div class="guide-step">
+                    <div class="guide-step-num">4</div>
+                    <div class="guide-step-text"><strong>Daftar Event:</strong> Buka menu "Daftar Event", pilih event aktif, dan klik "Daftar". Sistem mencatat otomatis jika kuota masih ada.</div>
+                </div>
+                <div class="guide-step">
+                    <div class="guide-step-num">5</div>
+                    <div class="guide-step-text"><strong>Pantau Riwayat:</strong> Cek status pendaftaran (Menunggu / Diterima / Ditolak) di menu "Riwayat Saya".</div>
+                </div>
+            </div>
+
+            <!-- FAQ ACCORDION -->
+            <div class="faq-section-title" style="margin-top: 0.5rem;">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Pertanyaan yang Sering Diajukan
+            </div>
+            <div class="faq-accordion-list">
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">Apakah saya perlu verifikasi OTP setiap kali login?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                    <div class="accordion-body">Tidak. OTP hanya diperlukan satu kali saat pertama kali mendaftarkan akun. Setelah akun terverifikasi, Anda bisa login langsung dengan Email dan Password tanpa OTP.</div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">Bagaimana jika kode OTP saya tidak masuk ke email?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                    <div class="accordion-body">Coba cek folder Spam/Junk di email Anda. Jika tetap tidak ada, pastikan email yang dimasukkan saat registrasi sudah benar. Hubungi admin jika masalah berlanjut: masnidarakmi@gmail.com</div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">Bisakah saya mengubah Email atau NIM?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                    <div class="accordion-body">Tidak bisa. Email dan NIM terkunci setelah registrasi untuk menjaga integritas data akademik. Jika ada kesalahan, hubungi Admin institusi.</div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">Bagaimana cara mendaftar ke suatu event?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                    <div class="accordion-body">Login ke portal mahasiswa → buka menu "Daftar Event" → klik event yang diminati → klik tombol "Daftar Event". Jika kuota masih tersedia, pendaftaran langsung tercatat otomatis.</div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">Apakah ada batasan jumlah event yang bisa diikuti?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                    <div class="accordion-body">Tidak ada batasan maksimum. Namun pastikan jadwal event tidak bertabrakan. Setiap event memiliki kuota terbatas, jadi daftarkan diri Anda lebih awal.</div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">Bagaimana cara melihat status pendaftaran event saya?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                    <div class="accordion-body">Buka menu "Riwayat Saya" di Dashboard Mahasiswa. Di sana Anda bisa melihat daftar event yang telah didaftar beserta status: Menunggu, Diterima, atau Ditolak.</div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">Apakah saya bisa membatalkan pendaftaran event?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                    <div class="accordion-body">Pembatalan pendaftaran tergantung kebijakan panitia event. Jika perlu pembatalan, silakan hubungi panitia event atau admin POLVENT melalui email masnidarakmi@gmail.com.</div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">Bagaimana cara mengunggah atau mengganti foto profil?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                    <div class="accordion-body">Masuk ke menu "Profil Saya", klik tombol "Unggah Foto Baru", pilih file gambar (JPG/PNG/WebP, maks 2MB), lalu klik "Simpan Perubahan". Foto akan langsung diperbarui di seluruh halaman.</div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">Apa yang terjadi jika kuota event sudah penuh?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                    <div class="accordion-body">Jika kuota penuh, tombol "Daftar" tidak akan tersedia. Anda bisa memantau halaman event secara berkala jika ada kemungkinan kuota dibuka kembali oleh panitia.</div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">Kepada siapa saya melapor jika ada kendala sistem?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                    <div class="accordion-body">Hubungi Admin POLVENT melalui email: <strong>masnidarakmi@gmail.com</strong>. Sertakan screenshot error dan deskripsi kendala yang dialami agar dapat segera ditangani.</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
     // =================== EVENT SLIDER ===================
@@ -760,8 +1024,9 @@
         }
 
         function startAuto() {
-            clearInterval(autoTimer);
-            autoTimer = setInterval(next, 3200);
+            // clearInterval(autoTimer);
+            // autoTimer = setInterval(next, 3200);
+            // Disabled auto slide based on user request
         }
 
         function stopAuto() { clearInterval(autoTimer); }
@@ -821,11 +1086,11 @@
 
         // Pause on hover
         track.addEventListener('mouseenter', stopAuto);
-        track.addEventListener('mouseleave', startAuto);
+        track.addEventListener('mouseleave', () => {}); // disable auto start
 
         // Init
         goTo(0, false);
-        startAuto();
+        // startAuto(); // Disable auto slide based on user request
     })();
     </script>
 
@@ -844,15 +1109,14 @@
                     const sectionTop = section.offsetTop;
                     const sectionHeight = section.clientHeight;
                     // Add an offset so it highlights a bit before reaching the exact top
-                    if (scrollY >= (sectionTop - 250)) {
+                    if (scrollY >= (sectionTop - 150)) {
                         current = section.getAttribute('id');
                     }
                 });
 
                 navLinks.forEach(link => {
                     link.classList.remove('active');
-                    const href = link.getAttribute('href').substring(1); // get the id
-                    if (href === current) {
+                    if (link.getAttribute('href') === '/#' + current || link.getAttribute('href') === '#' + current) {
                         link.classList.add('active');
                     }
                 });
@@ -860,6 +1124,53 @@
 
             // Initial call to set active state on page load
             window.dispatchEvent(new Event('scroll'));
+        });
+        
+        // FAB & MODAL LOGIC
+        function toggleFabMenu() {
+            const menu = document.getElementById('fabMenu');
+            menu.classList.toggle('active');
+        }
+        
+        function openFaqModal() {
+            document.getElementById('fabMenu').classList.remove('active');
+            document.getElementById('faqModal').classList.add('active');
+        }
+        
+        function closeFaqModal(e) {
+            // Jika dipanggil dari overlay click, pastikan targetnya adalah overlay itu sendiri
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('faqModal').classList.remove('active');
+        }
+        
+        function toggleAccordion(btn) {
+            const body = btn.nextElementSibling;
+            const isOpen = btn.classList.contains('open');
+            // Close all others
+            document.querySelectorAll('.accordion-trigger.open').forEach(b => {
+                b.classList.remove('open');
+                b.nextElementSibling.classList.remove('open');
+            });
+            // Toggle clicked
+            if (!isOpen) {
+                btn.classList.add('open');
+                body.classList.add('open');
+            }
+        }
+        
+        function switchTab(e, tabId) {
+            document.querySelectorAll('.faq-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.faq-tab-content').forEach(c => c.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+        
+        // Tutup FAB menu jika klik di luar
+        document.addEventListener('click', function(e) {
+            const fabContainer = document.querySelector('.fab-container');
+            if (fabContainer && !fabContainer.contains(e.target)) {
+                document.getElementById('fabMenu').classList.remove('active');
+            }
         });
     </script>
 </body>

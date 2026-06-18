@@ -384,18 +384,6 @@
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                 Beranda
             </a>
-            <a href="{{ url('/#events') }}" class="nav-item">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                Daftar Event
-            </a>
-            <a href="{{ url('/#features') }}" class="nav-item">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
-                Keunggulan
-            </a>
-            <a href="{{ url('/#about') }}" class="nav-item">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Tentang Kami
-            </a>
 
             {{-- ========== ADMIN NAV ========== --}}
             @if(auth()->user()->isAdmin())
@@ -480,6 +468,12 @@
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     Riwayat Saya
                 </a>
+
+                <a href="{{ route('mahasiswa.profile.edit') }}"
+                   class="nav-item {{ request()->routeIs('mahasiswa.profile.*') ? 'active' : '' }}">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    Profil Saya
+                </a>
             @endif
         </nav>
 
@@ -529,17 +523,34 @@
             </div>
             <div class="topbar-right">
                 <span class="role-badge {{ auth()->user()->role }}">{{ ucfirst(auth()->user()->role) }}</span>
-                <div style="display:flex;align-items:center;gap:0.5rem;">
-                    @if(auth()->user()->profile_photo)
-                        <img src="{{ auth()->user()->profile_photo_url }}" alt="Profile" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
-                    @else
-                        <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
-                    @endif
-                    <div class="user-info" style="display:none;" id="topbarUserInfo">
-                        <div class="name">{{ auth()->user()->name }}</div>
-                        <div class="sub">{{ auth()->user()->email }}</div>
+                @if(auth()->user()->isMahasiswa())
+                    <a href="{{ route('mahasiswa.profile.edit') }}"
+                       style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;padding:0.3rem 0.625rem;border-radius:0.625rem;transition:background 0.2s;"
+                       onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'"
+                       title="Lihat Profil">
+                        @if(auth()->user()->profile_photo)
+                            <img src="{{ auth()->user()->profile_photo_url }}" alt="Profile" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #e2e8f0;">
+                        @else
+                            <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
+                        @endif
+                        <div class="user-info" style="display:none;" id="topbarUserInfo">
+                            <div class="name">{{ auth()->user()->name }}</div>
+                            <div class="sub">{{ auth()->user()->email }}</div>
+                        </div>
+                    </a>
+                @else
+                    <div style="display:flex;align-items:center;gap:0.5rem;">
+                        @if(auth()->user()->profile_photo)
+                            <img src="{{ auth()->user()->profile_photo_url }}" alt="Profile" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                        @else
+                            <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
+                        @endif
+                        <div class="user-info" style="display:none;" id="topbarUserInfo">
+                            <div class="name">{{ auth()->user()->name }}</div>
+                            <div class="sub">{{ auth()->user()->email }}</div>
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
         </header>
 

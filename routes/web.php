@@ -149,4 +149,10 @@ Route::middleware(['auth', 'checkRole:mahasiswa'])
         // Riwayat event
         Route::get('/history', [MahasiswaEventController::class, 'history'])
             ->name('history');
+
+        // Profile
+        Route::get('/profile', [\App\Http\Controllers\Mahasiswa\ProfileController::class, 'edit'])
+            ->name('profile.edit');
+        Route::patch('/profile', [\App\Http\Controllers\Mahasiswa\ProfileController::class, 'update'])
+            ->name('profile.update');
     });

@@ -59,14 +59,10 @@
                     @elseif($isFull)
                         <span style="font-size:0.78rem;color:#dc2626;font-weight:600;">Kuota Penuh</span>
                     @else
-                        <form method="POST" action="{{ route('mahasiswa.events.register') }}">
-                            @csrf
-                            <input type="hidden" name="event_id" value="{{ $event->id }}">
-                            <button type="submit" class="btn btn-primary btn-sm">
-                                <svg style="width:13px;height:13px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                                Daftar
-                            </button>
-                        </form>
+                        <a href="{{ route('mahasiswa.events.show', $event) }}#btn-daftar-event" class="btn btn-primary btn-sm">
+                            <svg style="width:13px;height:13px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            Daftar
+                        </a>
                     @endif
                 </div>
             </div>

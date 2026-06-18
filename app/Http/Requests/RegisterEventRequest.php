@@ -20,7 +20,12 @@ class RegisterEventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'event_id' => ['required', 'integer', 'exists:events,id'],
+            'event_id'      => ['required', 'integer', 'exists:events,id'],
+            'nama_lengkap'  => ['required', 'string', 'max:255'],
+            'nim'           => ['required', 'string', 'max:50'],
+            'jurusan'       => ['required', 'string', 'max:255'],
+            'program_studi' => ['required', 'string', 'max:255'],
+            'angkatan'      => ['required', 'integer', 'min:2000', 'max:2100'],
         ];
     }
 
@@ -30,8 +35,14 @@ class RegisterEventRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'event_id.required' => 'Event tidak ditemukan.',
-            'event_id.exists'   => 'Event tidak valid.',
+            'event_id.required'      => 'Event tidak ditemukan.',
+            'event_id.exists'        => 'Event tidak valid.',
+            'nama_lengkap.required'  => 'Nama Lengkap wajib diisi.',
+            'nim.required'           => 'NIM wajib diisi.',
+            'jurusan.required'       => 'Jurusan wajib diisi.',
+            'program_studi.required' => 'Program Studi wajib diisi.',
+            'angkatan.required'      => 'Angkatan wajib diisi.',
+            'angkatan.integer'       => 'Angkatan harus berupa angka.',
         ];
     }
 }

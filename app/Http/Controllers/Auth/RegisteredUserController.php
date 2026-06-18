@@ -35,17 +35,7 @@ class RegisteredUserController extends Controller
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'g-recaptcha-response' => ['required', 'string'],
-        ], [
-            'g-recaptcha-response.required' => 'Verifikasi reCAPTCHA gagal. Silakan coba lagi.',
         ]);
-
-        // Validasi reCAPTCHA via Google API
-        if (! RecaptchaService::verify($request->input('g-recaptcha-response'))) {
-            throw ValidationException::withMessages([
-                'g-recaptcha-response' => 'Verifikasi reCAPTCHA gagal. Silakan coba lagi.',
-            ]);
-        }
 
         $user = User::create([
             'name'            => $request->name,
@@ -54,18 +44,7 @@ class RegisteredUserController extends Controller
             'is_otp_verified' => false,
         ]);
 
-        // Generate OTP dan kirim ke email pengguna
-        $user->generateOtp();
-        $user->sendOtpMail();
-
-        // Simpan user_id di session untuk verifikasi OTP
-        session([
-            'otp_user_id'     => $user->id,
-            'otp_context'     => 'registration',
-            'otp_role'        => 'mahasiswa',
-        ]);
-
-        return redirect()->route('otp.verify')
-            ->with('status', 'Akun berhasil dibuat! Kode OTP telah dikirim ke email Anda. Silakan verifikasi.');
+        return redirect()->route('login')
+            ->with('status', 'Akun berhasil dibuat! Silakan masuk dengan email dan password Anda.');
     }
 }
