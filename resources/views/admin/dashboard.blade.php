@@ -152,11 +152,11 @@
                             <td>
                                 <div style="display:flex;align-items:center;gap:0.5rem;">
                                     <div style="width:28px;height:28px;background:#f1f5f9;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.65rem;color:#374151;flex-shrink:0;">
-                                        {{ strtoupper(substr($log->user->name, 0, 1)) }}
+                                        {{ $log->user ? strtoupper(substr($log->user->name, 0, 1)) : '?' }}
                                     </div>
                                     <div>
-                                        <div style="font-weight:600;color:#1e293b;font-size:0.82rem;">{{ $log->user->name }}</div>
-                                        <div style="font-size:0.68rem;color:#64748b;">{{ ucfirst($log->user->role) }}</div>
+                                        <div style="font-weight:600;color:#1e293b;font-size:0.82rem;">{{ $log->user ? $log->user->name : 'Pengguna Dihapus' }}</div>
+                                        <div style="font-size:0.68rem;color:#64748b;">{{ $log->user ? ucfirst($log->user->role) : 'Unknown' }}</div>
                                     </div>
                                 </div>
                             </td>

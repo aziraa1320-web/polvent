@@ -46,4 +46,9 @@ return [
         'secret_key' => env('RECAPTCHA_SECRET_KEY'),
     ],
 
+    'fonnte' => [
+        'token' => env('FONNTE_TOKEN', ''),
+        'url'   => 'https://api.fonnte.com/send',
+    ],
+
 ];

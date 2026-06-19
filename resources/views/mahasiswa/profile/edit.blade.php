@@ -294,8 +294,8 @@
                         <label class="field-label" for="angkatan">Angkatan</label>
                         <select id="angkatan" name="angkatan" class="field-input {{ $errors->has('angkatan') ? 'is-invalid' : '' }}">
                             <option value="">-- Pilih Angkatan --</option>
-                            @for($i = 20; $i <= 26; $i++)
-                                <option value="AKT {{ $i }}" {{ old('angkatan', $user->angkatan) == "AKT $i" ? 'selected' : '' }}>AKT {{ $i }}</option>
+                            @for($i = 2020; $i <= date('Y') + 1; $i++)
+                                <option value="{{ $i }}" {{ old('angkatan', $user->angkatan) == $i ? 'selected' : '' }}>{{ $i }}</option>
                             @endfor
                         </select>
                         @error('angkatan') <div class="field-error">{{ $message }}</div> @enderror

@@ -772,7 +772,7 @@
                         <img src="{{ asset('images/logo-polvent.png') }}" alt="POLVENT" style="width: 140px; height: auto;">
                     </div>
                     <h3 style="font-family: 'Outfit'; color: white; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem;">Politeknik Event</h3>
-                    <p style="color: #cbd5e1; font-size: 1rem;">Masa Depan Event Kampus</p>
+                    <p style="color: #cbd5e1; font-size: 1rem;">Platform Manajemen Event Kampus Polbeng</p>
                 </div>
                 <style>
                     @keyframes morph {
@@ -827,7 +827,7 @@
                         </li>
                         <li style="display:flex;align-items:center;gap:0.5rem;color:#64748b;font-size:0.9rem;">
                             <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                            info@polbeng.ac.id
+                            polvent02@gmail.com
                         </li>
                     </ul>
                 </div>
@@ -845,7 +845,7 @@
                 <span>FAQ / Pertanyaan</span>
                 <div class="fab-item-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
             </button>
-            <a href="mailto:masnidarakmi@gmail.com" class="fab-item">
+            <a href="mailto:polvent02@gmail.com" class="fab-item">
                 <span>Email Admin</span>
                 <div class="fab-item-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
             </a>
@@ -853,7 +853,7 @@
                 <span>Panduan Pendaftaran</span>
                 <div class="fab-item-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div>
             </a>
-            <a href="mailto:masnidarakmi@gmail.com?subject=Laporan Kendala" class="fab-item">
+            <a href="mailto:polvent02@gmail.com?subject=Laporan Kendala" class="fab-item">
                 <span>Laporan Kendala</span>
                 <div class="fab-item-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg></div>
             </a>
@@ -885,7 +885,7 @@
                 </div>
                 <div class="guide-step">
                     <div class="guide-step-num">2</div>
-                    <div class="guide-step-text"><strong>Login:</strong> Masukkan Email & Password. Setelah verifikasi OTP selesai, login langsung tanpa OTP lagi.</div>
+                    <div class="guide-step-text"><strong>Login:</strong> Masukkan Email &amp; Password. Kode OTP dikirim ke <strong>WhatsApp</strong> yang terdaftar. Masukkan kode OTP untuk masuk ke dashboard.</div>
                 </div>
                 <div class="guide-step">
                     <div class="guide-step-num">3</div>
@@ -909,11 +909,11 @@
             <div class="faq-accordion-list">
                 <div class="accordion-item">
                     <button class="accordion-trigger" onclick="toggleAccordion(this)">Apakah saya perlu verifikasi OTP setiap kali login?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
-                    <div class="accordion-body">Tidak. OTP hanya diperlukan satu kali saat pertama kali mendaftarkan akun. Setelah akun terverifikasi, Anda bisa login langsung dengan Email dan Password tanpa OTP.</div>
+                    <div class="accordion-body">Ya. Setiap kali login, sistem akan mengirimkan kode OTP ke <strong>WhatsApp</strong> yang terdaftar di akun Anda. Masukkan kode tersebut untuk masuk ke dashboard. Pastikan nomor WA aktif dan terdaftar di profil.</div>
                 </div>
                 <div class="accordion-item">
-                    <button class="accordion-trigger" onclick="toggleAccordion(this)">Bagaimana jika kode OTP saya tidak masuk ke email?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
-                    <div class="accordion-body">Coba cek folder Spam/Junk di email Anda. Jika tetap tidak ada, pastikan email yang dimasukkan saat registrasi sudah benar. Hubungi admin jika masalah berlanjut: masnidarakmi@gmail.com</div>
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">Bagaimana jika kode OTP saya tidak masuk ke WhatsApp?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+                    <div class="accordion-body">Pastikan nomor WhatsApp yang terdaftar di profil sudah benar dan aktif. Coba klik "Kirim Ulang OTP". Jika tetap tidak masuk, hubungi admin: polvent02@gmail.com</div>
                 </div>
                 <div class="accordion-item">
                     <button class="accordion-trigger" onclick="toggleAccordion(this)">Bisakah saya mengubah Email atau NIM?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
@@ -933,7 +933,7 @@
                 </div>
                 <div class="accordion-item">
                     <button class="accordion-trigger" onclick="toggleAccordion(this)">Apakah saya bisa membatalkan pendaftaran event?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
-                    <div class="accordion-body">Pembatalan pendaftaran tergantung kebijakan panitia event. Jika perlu pembatalan, silakan hubungi panitia event atau admin POLVENT melalui email masnidarakmi@gmail.com.</div>
+                    <div class="accordion-body">Pembatalan pendaftaran tergantung kebijakan panitia event. Jika perlu pembatalan, silakan hubungi panitia event atau admin POLVENT melalui email polvent02@gmail.com.</div>
                 </div>
                 <div class="accordion-item">
                     <button class="accordion-trigger" onclick="toggleAccordion(this)">Bagaimana cara mengunggah atau mengganti foto profil?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
@@ -945,7 +945,7 @@
                 </div>
                 <div class="accordion-item">
                     <button class="accordion-trigger" onclick="toggleAccordion(this)">Kepada siapa saya melapor jika ada kendala sistem?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
-                    <div class="accordion-body">Hubungi Admin POLVENT melalui email: <strong>masnidarakmi@gmail.com</strong>. Sertakan screenshot error dan deskripsi kendala yang dialami agar dapat segera ditangani.</div>
+                    <div class="accordion-body">Hubungi Admin POLVENT melalui email: <strong>polvent02@gmail.com</strong>. Sertakan screenshot error dan deskripsi kendala yang dialami agar dapat segera ditangani.</div>
                 </div>
             </div>
         </div>
@@ -961,8 +961,11 @@
         const totalReal = originalCards.length;
         if (totalReal === 0) return;
 
+        let isCloned = false;
         // JS-based cloning for infinite loop (no server-side duplication)
-        if (totalReal > 1) {
+        // Hanya clone jika lebih dari 3 event agar tidak terlihat dobel di layar desktop
+        if (totalReal > 3) {
+            isCloned = true;
             originalCards.forEach(card => {
                 const clone = card.cloneNode(true);
                 clone.setAttribute('aria-hidden', 'true');
@@ -1000,12 +1003,20 @@
 
         function next() {
             currentIndex++;
-            if (currentIndex >= totalReal * 2) {
+            const maxIndex = isCloned ? totalReal * 2 : totalReal;
+            
+            if (isCloned && currentIndex >= totalReal * 2) {
                 goTo(0, false);
                 requestAnimationFrame(() => requestAnimationFrame(() => goTo(1)));
                 return;
+            } else if (!isCloned && currentIndex >= totalReal) {
+                // Return to first item without infinite loop effect if not cloned
+                currentIndex = 0;
+                goTo(currentIndex);
+                return;
             }
-            if (currentIndex === totalReal) {
+            
+            if (isCloned && currentIndex === totalReal) {
                 goTo(currentIndex);
                 setTimeout(() => { goTo(0, false); }, 560);
                 return;
@@ -1015,8 +1026,13 @@
 
         function prev() {
             if (currentIndex <= 0) {
-                goTo(totalReal, false);
-                requestAnimationFrame(() => requestAnimationFrame(() => goTo(totalReal - 1)));
+                if (isCloned) {
+                    goTo(totalReal, false);
+                    requestAnimationFrame(() => requestAnimationFrame(() => goTo(totalReal - 1)));
+                } else {
+                    currentIndex = totalReal - 1;
+                    goTo(currentIndex);
+                }
                 return;
             }
             currentIndex--;

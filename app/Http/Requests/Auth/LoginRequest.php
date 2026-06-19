@@ -89,31 +89,6 @@ class LoginRequest extends FormRequest
 
         $user = User::where('email', $this->input('email'))->first();
 
-        // Proses OTP khusus untuk Mahasiswa pada saat login jika akun belum diverifikasi
-        if ($user && $user->role === 'mahasiswa' && !$user->is_otp_verified) {
-            session([
-                'otp_user_id'  => $user->id,
-                'otp_context'  => 'login',
-                'otp_role'     => $user->role,
-                'otp_remember' => $this->boolean('remember'),
-            ]);
-
-            // OTP hanya dikirim satu kali pada proses login (menggunakan pembatasan resend count)
-            // Jika butuh dikirim lagi, mereka bisa tekan tombol Kirim Ulang di halaman verifikasi
-            if ($user->canResendOtp()) {
-                $user->generateOtp();
-                $user->sendOtpMail();
-                $user->incrementOtpResendCount();
-                $message = 'Kode OTP telah dikirim ke email Anda. Silakan masukkan kode OTP untuk memverifikasi akun Anda.';
-            } else {
-                $message = 'Batas pengiriman OTP otomatis tercapai. Silakan masukkan kode OTP Anda atau tunggu untuk bisa kirim ulang.';
-            }
-
-            throw new \Illuminate\Http\Exceptions\HttpResponseException(
-                redirect()->route('otp.verify')->with('status', $message)
-            );
-        }
-
         RateLimiter::clear($this->throttleKey());
 
         return $user;

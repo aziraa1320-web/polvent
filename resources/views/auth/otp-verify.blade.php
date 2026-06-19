@@ -130,19 +130,20 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 
-{{-- Email badge --}}
+{{-- WhatsApp badge --}}
 <div style="text-align:center;margin-bottom:1rem;">
-    <div style="display:inline-flex;align-items:center;gap:0.5rem;background:#eff6ff;border:1px solid #bfdbfe;border-radius:9999px;padding:0.35rem 1rem;font-size:0.8rem;color:#1d4ed8;font-weight:600;">
-        <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+    <div style="display:inline-flex;align-items:center;gap:0.5rem;background:#dcfce7;border:1px solid #86efac;border-radius:9999px;padding:0.35rem 1rem;font-size:0.8rem;color:#15803d;font-weight:600;">
+        <svg style="width:14px;height:14px;" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.556 4.123 1.526 5.853L.057 23.215a.75.75 0 00.921.921l5.362-1.469A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.703 9.703 0 01-4.952-1.354l-.355-.211-3.682 1.008 1.008-3.682-.211-.355A9.703 9.703 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
         </svg>
-        Kode OTP telah dikirim ke email Anda
+        Kode OTP telah dikirim ke WhatsApp Anda
     </div>
 </div>
 
 <div class="form-title">Verifikasi Keamanan 🔐</div>
 <div class="form-sub">
-    Masukkan 6 digit kode OTP yang kami kirimkan ke email Anda untuk menyelesaikan proses login.
+    Masukkan 6 digit kode OTP yang kami kirimkan ke <strong>WhatsApp</strong> Anda untuk menyelesaikan proses login.
 </div>
 
 @if(session('status'))
@@ -151,6 +152,15 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
         {{ session('status') }}
+    </div>
+@endif
+
+@if(session('wa_error'))
+    <div class="warning-alert">
+        <svg style="width:16px;height:16px;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+        {{ session('wa_error') }}
     </div>
 @endif
 

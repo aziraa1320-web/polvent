@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Facades\Storage;
+use App\Services\FonnteService;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -140,7 +141,38 @@ class User extends Authenticatable
     }
 
     /**
-     * Send OTP via email.
+     * Send OTP via WhatsApp menggunakan Fonnte API.
+     * Return true jika berhasil, false jika gagal.
+     */
+    public function sendOtpWa(): bool
+    {
+        if (empty($this->phone)) {
+            \Illuminate\Support\Facades\Log::warning("Gagal kirim OTP WA: user {$this->id} tidak punya nomor HP.");
+            session()->flash('wa_error', 'Nomor WhatsApp belum terdaftar. Hubungi admin untuk memperbarui nomor Anda.');
+            return false;
+        }
+
+        try {
+            $fonnte = new FonnteService();
+            $success = $fonnte->sendOtp($this->phone, $this->otp_code);
+
+            if (! $success) {
+                \Illuminate\Support\Facades\Log::error("Fonnte gagal kirim OTP ke nomor {$this->phone}");
+                \Illuminate\Support\Facades\Log::info("DEBUG OTP CODE untuk {$this->email}: {$this->otp_code}");
+                session()->flash('wa_error', 'Gagal mengirim OTP ke WhatsApp. Silakan coba kirim ulang.');
+            }
+
+            return $success;
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Exception saat kirim OTP WA ke {$this->phone}: " . $e->getMessage());
+            \Illuminate\Support\Facades\Log::info("DEBUG OTP CODE untuk {$this->email}: {$this->otp_code}");
+            session()->flash('wa_error', 'Terjadi kesalahan saat mengirim OTP ke WhatsApp. Silakan coba lagi.');
+            return false;
+        }
+    }
+
+    /**
+     * Send OTP via email (legacy — tidak dipakai di flow utama).
      */
     public function sendOtpMail(): void
     {
@@ -149,9 +181,7 @@ class User extends Authenticatable
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error("Gagal mengirim email OTP ke {$this->email}: " . $e->getMessage());
             \Illuminate\Support\Facades\Log::info("DEBUG OTP CODE untuk {$this->email}: {$this->otp_code}");
-
-            // Simpan warning di session agar view OTP dapat menginfokannya ke pengguna
-            session()->flash('mail_error', 'Gagal mengirim email OTP. Silakan periksa log sistem (laravel.log) untuk mendapatkan kode OTP Anda.');
+            session()->flash('mail_error', 'Gagal mengirim email OTP.');
         }
     }
 

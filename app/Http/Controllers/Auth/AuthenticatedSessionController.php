@@ -48,7 +48,7 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle login for Mahasiswa — no OTP, direct login after captcha.
+     * Handle login untuk Mahasiswa — verifikasi password lalu kirim OTP ke WA.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
@@ -60,18 +60,27 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-        Auth::login($user, $request->boolean('remember'));
-        $request->session()->regenerate();
+        // Cek nomor WA
+        if (empty($user->phone)) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'email' => 'Nomor WhatsApp belum terdaftar di akun ini. Hubungi admin.',
+            ]);
+        }
 
-        LoginHistory::create([
-            'user_id'    => $user->id,
-            'email'      => $user->email,
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'status'     => 'success',
+        // Generate OTP & kirim ke WA
+        $user->generateOtp();
+        $user->sendOtpWa();
+        $user->incrementOtpResendCount();
+
+        // Simpan data sesi OTP
+        session([
+            'otp_user_id'  => $user->id,
+            'otp_role'     => 'mahasiswa',
+            'otp_remember' => $request->boolean('remember'),
+            'otp_context'  => 'login',
         ]);
 
-        return redirect()->route('mahasiswa.dashboard');
+        return redirect()->route('otp.verify');
     }
 
     /**
@@ -102,7 +111,7 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle login for Panitia — no OTP, direct login after captcha.
+     * Handle login untuk Panitia — verifikasi password lalu kirim OTP ke WA.
      */
     public function storePanitia(LoginRequest $request): RedirectResponse
     {
@@ -114,18 +123,27 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-        Auth::login($user, $request->boolean('remember'));
-        $request->session()->regenerate();
+        // Cek nomor WA
+        if (empty($user->phone)) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'email' => 'Nomor WhatsApp belum terdaftar di akun ini. Hubungi admin.',
+            ]);
+        }
 
-        LoginHistory::create([
-            'user_id'    => $user->id,
-            'email'      => $user->email,
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'status'     => 'success',
+        // Generate OTP & kirim ke WA
+        $user->generateOtp();
+        $user->sendOtpWa();
+        $user->incrementOtpResendCount();
+
+        // Simpan data sesi OTP
+        session([
+            'otp_user_id'  => $user->id,
+            'otp_role'     => 'panitia',
+            'otp_remember' => $request->boolean('remember'),
+            'otp_context'  => 'login',
         ]);
 
-        return redirect()->route('panitia.dashboard');
+        return redirect()->route('otp.verify');
     }
 
     /**

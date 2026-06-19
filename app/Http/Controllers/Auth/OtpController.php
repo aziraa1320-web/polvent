@@ -17,13 +17,18 @@ class OtpController extends Controller
     {
         $request->validate([
             'email' => ['required', 'string', 'email'],
-            'role' => ['required', 'string', 'in:mahasiswa,admin,panitia'],
+            'role'  => ['required', 'string', 'in:mahasiswa,admin,panitia'],
         ]);
 
         $user = User::where('email', $request->email)->first();
 
         if (! $user || $user->role !== $request->role) {
             return back()->withErrors(['email' => 'Email tidak terdaftar atau tidak memiliki akses ke portal ini.']);
+        }
+
+        // Cek nomor HP / WA
+        if (empty($user->phone)) {
+            return back()->withErrors(['email' => 'Nomor WhatsApp belum terdaftar di akun ini. Hubungi admin.']);
         }
 
         // Cek rate limit kirim OTP
@@ -38,13 +43,13 @@ class OtpController extends Controller
         }
 
         $user->generateOtp();
-        $user->sendOtpMail();
+        $user->sendOtpWa();
         $user->incrementOtpResendCount();
 
         session([
             'otp_user_id' => $user->id,
-            'otp_role' => $user->role,
-            'otp_remember' => $request->boolean('remember'),
+            'otp_role'    => $user->role,
+            'otp_remember'=> $request->boolean('remember'),
             'otp_context' => 'login',
         ]);
 
@@ -172,9 +177,9 @@ class OtpController extends Controller
         }
 
         $user->generateOtp();
-        $user->sendOtpMail();
+        $user->sendOtpWa();
         $user->incrementOtpResendCount();
 
-        return back()->with('status', 'Kode OTP baru telah dikirim ke email Anda.');
+        return back()->with('status', 'Kode OTP baru telah dikirim ke WhatsApp Anda.');
     }
 }
