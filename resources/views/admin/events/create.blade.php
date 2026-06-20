@@ -283,6 +283,28 @@
                     @error('description') <div class="field-error">⚠ {{ $message }}</div> @enderror
                 </div>
 
+                <div class="field-row">
+                    <div class="field-group">
+                        <label class="field-label" for="location">Lokasi Event <span class="optional">(opsional)</span></label>
+                        <select name="location" id="location" class="field-input {{ $errors->has('location') ? 'is-invalid' : '' }}">
+                            <option value="">— Pilih Lokasi —</option>
+                            <option value="Aula Teknik Informatika" {{ old('location') == 'Aula Teknik Informatika' ? 'selected' : '' }}>Aula Teknik Informatika</option>
+                            <option value="Aula Bahasa" {{ old('location') == 'Aula Bahasa' ? 'selected' : '' }}>Aula Bahasa</option>
+                            <option value="Aula ADM" {{ old('location') == 'Aula ADM' ? 'selected' : '' }}>Aula ADM</option>
+                        </select>
+                        <div class="field-hint">Pilih lokasi agar sistem mengecek ketersediaan jadwal</div> @error('location') <div class="field-error">⚠ {{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="organizer">Penyelenggara <span class="optional">(opsional)</span></label>
+                        <input type="text" name="organizer" id="organizer" value="{{ old('organizer') }}"
+                            class="field-input {{ $errors->has('organizer') ? 'is-invalid' : '' }}"
+                            placeholder="Contoh: Polbeng / HMJ TI">
+                        <div class="field-hint">Default: Polbeng</div>
+                        @error('organizer') <div class="field-error">⚠ {{ $message }}</div> @enderror
+                    </div>
+                </div>
+
                 <div class="field-divider"></div>
 
                 {{-- Section: Jadwal & Kapasitas --}}

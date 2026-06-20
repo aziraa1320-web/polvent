@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Profil Panitia')
+@section('title', 'Edit Profil Admin')
 @section('page-title', 'Edit Profil')
 @section('page-breadcrumb')
-    Panitia / <span>Edit Profil</span>
+    Admin / <span>Edit Profil</span>
 @endsection
 
 @push('styles')
@@ -126,14 +126,14 @@
             <div>
                 <h3>
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    Informasi Profil
+                    Informasi Profil Administrator
                 </h3>
                 <p>Perbarui informasi akun dan foto profil Anda</p>
             </div>
         </div>
 
         <div class="profile-form-body">
-            <form method="POST" action="{{ route('panitia.profile.update') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('admin.profile.update') }}" enctype="multipart/form-data">
                 @csrf
                 @method('patch')
 
@@ -175,7 +175,7 @@
                         <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         Simpan Perubahan
                     </button>
-                    <a href="{{ route('panitia.dashboard') }}" class="btn btn-secondary" style="margin-left: auto;">
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary" style="margin-left: auto;">
                         Selesai / Kembali
                     </a>
                 </div>

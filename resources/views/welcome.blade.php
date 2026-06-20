@@ -657,13 +657,17 @@
                     </div>
                     <div class="sc-body">
                         <h3 class="sc-title">{{ $event->title }}</h3>
+                        <p class="sc-organizer" style="font-size:0.8rem; color:var(--primary); font-weight:600; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.3rem;">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                            {{ $event->organizer ?? 'Polbeng' }}
+                        </p>
                         <p class="sc-desc">{{ Str::limit($event->description, 90) }}</p>
                         <div class="sc-footer">
                             <div class="sc-quota">
                                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                 <span>Kuota: <strong>{{ $event->quota }}</strong></span>
                             </div>
-                            <a href="{{ route('login') }}" class="sc-btn">Lihat Detail →</a>
+                            <a href="#" class="sc-btn" onclick="openEventModal({{ $event->id }}); return false;">Lihat Detail →</a>
                         </div>
                     </div>
                 </div>
@@ -838,6 +842,93 @@
         </div>
     </footer>
 
+    <!-- EVENT DATA JSON (for modal) -->
+    <script id="eventsData" type="application/json">
+        {!! json_encode(\App\Models\Event::with('creator')->get()->map(function($ev) {
+            return [
+                'id' => $ev->id,
+                'title' => $ev->title,
+                'description' => $ev->description,
+                'event_date' => $ev->event_date->format('d F Y, H:i') . ' WIB',
+                'quota' => $ev->quota,
+                'location' => $ev->location ?? 'Belum ditentukan',
+                'organizer' => $ev->organizer ?? 'Polbeng',
+                'poster' => $ev->poster ? \Illuminate\Support\Facades\Storage::url($ev->poster) : '',
+                'approved' => $ev->approvedRegistrations()->count()
+            ];
+        })) !!}
+    </script>
+
+    <!-- EVENT DETAIL MODAL -->
+    <div id="eventDetailModal" onclick="closeEventModal(event)" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.65); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:1rem;">
+        <div onclick="event.stopPropagation()" style="background:white; border-radius:24px; max-width:760px; width:100%; max-height:90vh; overflow-y:auto; box-shadow:0 30px 60px rgba(0,0,0,0.3); position:relative;">
+            <!-- Header image -->
+            <div id="edPoster" style="width:100%; background:linear-gradient(135deg, #0f285c, #1e3a8a); border-radius:24px 24px 0 0; overflow:hidden; position:relative; display:flex; align-items:center; justify-content:center;">
+                <img id="edPosterImg" src="" alt="" style="width:100%; max-height:550px; object-fit:contain; display:none; background:rgba(0,0,0,0.2);">
+                <div id="edPosterPlaceholder" style="display:flex; align-items:center; justify-content:center; height:280px; width:100%;">
+                    <svg width="80" height="80" fill="none" stroke="rgba(255,255,255,0.4)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <!-- Close button over poster -->
+                <button onclick="closeEventModal()" style="position:absolute; top:1rem; right:1rem; background:rgba(0,0,0,0.5); border:none; color:white; width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(8px);">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <!-- Body -->
+            <div style="padding:2rem;">
+                <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1rem;">
+                    <span id="edDateBadge" style="display:inline-flex; align-items:center; gap:0.4rem; background:#eff6ff; color:#1d4ed8; padding:0.35rem 0.875rem; border-radius:999px; font-size:0.8rem; font-weight:700;">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <span id="edDate"></span>
+                    </span>
+                    <span id="edQuotaBadge" style="display:inline-flex; align-items:center; gap:0.4rem; background:#d1fae5; color:#059669; padding:0.35rem 0.875rem; border-radius:999px; font-size:0.8rem; font-weight:700;">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        Kuota: <strong><span id="edQuota"></span></strong>
+                    </span>
+                </div>
+                <h2 id="edTitle" style="font-family:'Outfit',sans-serif; font-size:1.6rem; font-weight:800; color:#0f172a; margin-bottom:0.75rem; line-height:1.3;"></h2>
+                <!-- Info row -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:1.5rem;" class="ed-info-grid">
+                    <div style="display:flex; align-items:center; gap:0.5rem; background:#f8fafc; padding:0.75rem 1rem; border-radius:12px; border:1px solid #e2e8f0;">
+                        <svg width="18" height="18" fill="none" stroke="#0f285c" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        <div>
+                            <div style="font-size:0.7rem; color:#64748b; font-weight:600; text-transform:uppercase;">Penyelenggara</div>
+                            <div id="edOrganizer" style="font-weight:700; color:#1e293b; font-size:0.9rem;"></div>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:0.5rem; background:#f8fafc; padding:0.75rem 1rem; border-radius:12px; border:1px solid #e2e8f0;">
+                        <svg width="18" height="18" fill="none" stroke="#0f285c" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <div>
+                            <div style="font-size:0.7rem; color:#64748b; font-weight:600; text-transform:uppercase;">Lokasi</div>
+                            <div id="edLocation" style="font-weight:700; color:#1e293b; font-size:0.9rem;"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Description -->
+                <div style="margin-bottom:2rem;">
+                    <h4 style="font-size:0.875rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.75rem;">Deskripsi Event</h4>
+                    <p id="edDescription" style="color:#374151; font-size:0.95rem; line-height:1.75; white-space:pre-wrap;"></p>
+                </div>
+                <!-- CTA -->
+                <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+                    <a href="{{ route('register') }}" style="flex:1; min-width:180px; background:#0f285c; color:white; border:none; padding:0.875rem 1.5rem; border-radius:14px; font-weight:700; font-size:0.95rem; cursor:pointer; text-align:center; display:flex; align-items:center; justify-content:center; gap:0.5rem; text-decoration:none; transition:all 0.2s;" onmouseover="this.style.background='#1e3a8a'" onmouseout="this.style.background='#0f285c'">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+                        Daftar / Login untuk Ikuti Event
+                    </a>
+                    <button onclick="closeEventModal()" style="padding:0.875rem 1.25rem; border-radius:14px; border:1.5px solid #cbd5e1; background:white; color:#64748b; font-weight:600; cursor:pointer; transition:all 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        #eventDetailModal { display: none; }
+        #eventDetailModal.open { display: flex !important; }
+        @media (max-width: 640px) {
+            .ed-info-grid { grid-template-columns: 1fr !important; }
+        }
+    </style>
+
     <!-- FAB CONTAINER -->
     <div class="fab-container">
         <div class="fab-menu" id="fabMenu">
@@ -845,18 +936,10 @@
                 <span>FAQ / Pertanyaan</span>
                 <div class="fab-item-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
             </button>
-            <a href="mailto:polvent02@gmail.com" class="fab-item">
-                <span>Email Admin</span>
-                <div class="fab-item-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
-            </a>
-            <a href="#events" class="fab-item" onclick="toggleFabMenu()">
-                <span>Panduan Pendaftaran</span>
-                <div class="fab-item-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div>
-            </a>
-            <a href="mailto:polvent02@gmail.com?subject=Laporan Kendala" class="fab-item">
+            <button class="fab-item" onclick="openLaporanModal()">
                 <span>Laporan Kendala</span>
                 <div class="fab-item-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg></div>
-            </a>
+            </button>
         </div>
         <button class="fab-button" onclick="toggleFabMenu()">
             <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
@@ -873,34 +956,6 @@
                 </button>
             </div>
 
-            <!-- PANDUAN MAHASISWA -->
-            <div class="faq-section-title">
-                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Langkah-Langkah Penggunaan
-            </div>
-            <div class="guide-steps">
-                <div class="guide-step">
-                    <div class="guide-step-num">1</div>
-                    <div class="guide-step-text"><strong>Daftar Akun:</strong> Klik "Daftar Akun Baru", isi NIM, Nama, Email & Password. Verifikasi OTP dikirim ke email, cukup sekali saja.</div>
-                </div>
-                <div class="guide-step">
-                    <div class="guide-step-num">2</div>
-                    <div class="guide-step-text"><strong>Login:</strong> Masukkan Email &amp; Password. Kode OTP dikirim ke <strong>WhatsApp</strong> yang terdaftar. Masukkan kode OTP untuk masuk ke dashboard.</div>
-                </div>
-                <div class="guide-step">
-                    <div class="guide-step-num">3</div>
-                    <div class="guide-step-text"><strong>Lengkapi Profil:</strong> Buka menu "Profil Saya", isi data diri (Jurusan, Angkatan, Nomor HP) dan unggah foto profil.</div>
-                </div>
-                <div class="guide-step">
-                    <div class="guide-step-num">4</div>
-                    <div class="guide-step-text"><strong>Daftar Event:</strong> Buka menu "Daftar Event", pilih event aktif, dan klik "Daftar". Sistem mencatat otomatis jika kuota masih ada.</div>
-                </div>
-                <div class="guide-step">
-                    <div class="guide-step-num">5</div>
-                    <div class="guide-step-text"><strong>Pantau Riwayat:</strong> Cek status pendaftaran (Menunggu / Diterima / Ditolak) di menu "Riwayat Saya".</div>
-                </div>
-            </div>
-
             <!-- FAQ ACCORDION -->
             <div class="faq-section-title" style="margin-top: 0.5rem;">
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -909,15 +964,15 @@
             <div class="faq-accordion-list">
                 <div class="accordion-item">
                     <button class="accordion-trigger" onclick="toggleAccordion(this)">Apakah saya perlu verifikasi OTP setiap kali login?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
-                    <div class="accordion-body">Ya. Setiap kali login, sistem akan mengirimkan kode OTP ke <strong>WhatsApp</strong> yang terdaftar di akun Anda. Masukkan kode tersebut untuk masuk ke dashboard. Pastikan nomor WA aktif dan terdaftar di profil.</div>
+                    <div class="accordion-body">Tidak. Verifikasi OTP hanya dilakukan satu kali pada saat pendaftaran atau login pertama kali. Setelah akun terverifikasi, Anda bisa langsung masuk di waktu berikutnya.</div>
                 </div>
                 <div class="accordion-item">
                     <button class="accordion-trigger" onclick="toggleAccordion(this)">Bagaimana jika kode OTP saya tidak masuk ke WhatsApp?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
-                    <div class="accordion-body">Pastikan nomor WhatsApp yang terdaftar di profil sudah benar dan aktif. Coba klik "Kirim Ulang OTP". Jika tetap tidak masuk, hubungi admin: polvent02@gmail.com</div>
+                    <div class="accordion-body">Pastikan nomor WhatsApp yang terdaftar di profil sudah benar dan aktif. Coba klik "Kirim Ulang OTP". Jika tetap tidak masuk, Anda dapat melaporkannya melalui tombol Laporan Kendala.</div>
                 </div>
                 <div class="accordion-item">
                     <button class="accordion-trigger" onclick="toggleAccordion(this)">Bisakah saya mengubah Email atau NIM?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
-                    <div class="accordion-body">Tidak bisa. Email dan NIM terkunci setelah registrasi untuk menjaga integritas data akademik. Jika ada kesalahan, hubungi Admin institusi.</div>
+                    <div class="accordion-body">Tidak bisa. Email dan NIM terkunci setelah registrasi untuk menjaga integritas data akademik. Jika ada kesalahan, laporkan melalui tombol Laporan Kendala.</div>
                 </div>
                 <div class="accordion-item">
                     <button class="accordion-trigger" onclick="toggleAccordion(this)">Bagaimana cara mendaftar ke suatu event?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
@@ -933,7 +988,7 @@
                 </div>
                 <div class="accordion-item">
                     <button class="accordion-trigger" onclick="toggleAccordion(this)">Apakah saya bisa membatalkan pendaftaran event?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
-                    <div class="accordion-body">Pembatalan pendaftaran tergantung kebijakan panitia event. Jika perlu pembatalan, silakan hubungi panitia event atau admin POLVENT melalui email polvent02@gmail.com.</div>
+                    <div class="accordion-body">Pembatalan pendaftaran tergantung kebijakan panitia event. Jika perlu pembatalan, silakan hubungi panitia event terkait atau lapor melalui Laporan Kendala.</div>
                 </div>
                 <div class="accordion-item">
                     <button class="accordion-trigger" onclick="toggleAccordion(this)">Bagaimana cara mengunggah atau mengganti foto profil?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
@@ -945,9 +1000,45 @@
                 </div>
                 <div class="accordion-item">
                     <button class="accordion-trigger" onclick="toggleAccordion(this)">Kepada siapa saya melapor jika ada kendala sistem?<svg class="accordion-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
-                    <div class="accordion-body">Hubungi Admin POLVENT melalui email: <strong>polvent02@gmail.com</strong>. Sertakan screenshot error dan deskripsi kendala yang dialami agar dapat segera ditangani.</div>
+                    <div class="accordion-body">Gunakan tombol <strong>Laporan Kendala</strong>. Jelaskan detail kendala yang dialami agar dapat segera ditangani oleh admin POLVENT.</div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="faq-modal-overlay" id="laporanModal" onclick="closeLaporanModal(event)">
+        <div class="faq-modal-content" style="max-width: 500px;" onclick="event.stopPropagation()">
+            <div class="faq-modal-header">
+                <h3 class="faq-modal-title">Laporan & Saran</h3>
+                <button class="faq-modal-close" onclick="closeLaporanModal()">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            
+            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 1.5rem;">
+                Kirimkan laporan kendala, pertanyaan, atau saran Anda langsung ke admin. Kami akan merespon secepatnya.
+            </p>
+
+            <form action="mailto:polvent02@gmail.com" method="GET" enctype="text/plain" class="laporan-form" id="laporanForm">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; color: var(--navy);">Subjek</label>
+                    <select name="subject" required style="width: 100%; padding: 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 12px; font-family: inherit; font-size: 0.9rem; outline: none;">
+                        <option value="Laporan Kendala Sistem">Laporan Kendala Sistem</option>
+                        <option value="Pertanyaan Seputar Event">Pertanyaan Seputar Event</option>
+                        <option value="Saran & Masukan">Saran & Masukan</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; color: var(--navy);">Pesan / Detail Kendala</label>
+                    <textarea name="body" required rows="5" placeholder="Jelaskan kendala atau saran Anda secara detail..." style="width: 100%; padding: 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 12px; font-family: inherit; font-size: 0.9rem; outline: none; resize: vertical;"></textarea>
+                </div>
+
+                <button type="submit" style="width: 100%; background: var(--navy); color: white; border: none; padding: 0.875rem; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;" onmouseover="this.style.background='var(--primary-hover)'" onmouseout="this.style.background='var(--navy)'">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    Kirim Laporan via Email
+                </button>
+            </form>
         </div>
     </div>
 
@@ -957,28 +1048,14 @@
         const track = document.getElementById('sliderTrack');
         if (!track) return;
 
-        const originalCards = Array.from(track.querySelectorAll('.slider-card'));
-        const totalReal = originalCards.length;
+        const allCards = Array.from(track.querySelectorAll('.slider-card'));
+        const totalReal = allCards.length;
         if (totalReal === 0) return;
 
-        let isCloned = false;
-        // JS-based cloning for infinite loop (no server-side duplication)
-        // Hanya clone jika lebih dari 3 event agar tidak terlihat dobel di layar desktop
-        if (totalReal > 3) {
-            isCloned = true;
-            originalCards.forEach(card => {
-                const clone = card.cloneNode(true);
-                clone.setAttribute('aria-hidden', 'true');
-                track.appendChild(clone);
-            });
-        }
-
-        const allCards = track.querySelectorAll('.slider-card');
         const dots = document.querySelectorAll('.slider-dot');
         const cardWidth = allCards[0].offsetWidth + 24; // width + gap (1.5rem=24px)
 
         let currentIndex = 0;
-        let autoTimer = null;
         let isDragging = false;
         let startX = 0;
         let startTranslate = 0;
@@ -990,72 +1067,64 @@
 
         function goTo(index, animated = true) {
             if (!animated) track.style.transition = 'none';
-            else track.style.transition = 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            else track.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)'; // Halus dan lembut
 
             currentIndex = index;
             currentTranslate = getTranslate();
             track.style.transform = `translateX(${currentTranslate}px)`;
 
-            // Update dots (loop within real count)
-            const realIndex = currentIndex % totalReal;
-            dots.forEach((d, i) => d.classList.toggle('active', i === realIndex));
+            // Update dots
+            dots.forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+            
+            // Hide/Show arrows based on position
+            const btnPrev = document.getElementById('sliderPrev');
+            const btnNext = document.getElementById('sliderNext');
+            
+            // Calculate how many items are visible
+            const visibleItems = Math.floor(track.parentElement.offsetWidth / cardWidth);
+            const maxIndex = Math.max(0, totalReal - visibleItems);
+
+            if (btnPrev) {
+                btnPrev.style.display = 'flex'; // Selalu tampilkan
+                btnPrev.style.opacity = currentIndex === 0 ? '0.3' : '1';
+                btnPrev.style.pointerEvents = currentIndex === 0 ? 'none' : 'auto';
+            }
+            
+            if (btnNext) {
+                btnNext.style.display = 'flex'; // Selalu tampilkan
+                btnNext.style.opacity = currentIndex >= maxIndex ? '0.3' : '1';
+                btnNext.style.pointerEvents = currentIndex >= maxIndex ? 'none' : 'auto';
+            }
+            
+            if (document.getElementById('sliderDots')) {
+                document.getElementById('sliderDots').style.display = totalReal <= visibleItems ? 'none' : 'flex';
+            }
         }
 
         function next() {
+            const visibleItems = Math.floor(track.parentElement.offsetWidth / cardWidth);
+            const maxIndex = Math.max(0, totalReal - visibleItems);
+            
+            if (currentIndex >= maxIndex) return;
             currentIndex++;
-            const maxIndex = isCloned ? totalReal * 2 : totalReal;
-            
-            if (isCloned && currentIndex >= totalReal * 2) {
-                goTo(0, false);
-                requestAnimationFrame(() => requestAnimationFrame(() => goTo(1)));
-                return;
-            } else if (!isCloned && currentIndex >= totalReal) {
-                // Return to first item without infinite loop effect if not cloned
-                currentIndex = 0;
-                goTo(currentIndex);
-                return;
-            }
-            
-            if (isCloned && currentIndex === totalReal) {
-                goTo(currentIndex);
-                setTimeout(() => { goTo(0, false); }, 560);
-                return;
-            }
             goTo(currentIndex);
         }
 
         function prev() {
-            if (currentIndex <= 0) {
-                if (isCloned) {
-                    goTo(totalReal, false);
-                    requestAnimationFrame(() => requestAnimationFrame(() => goTo(totalReal - 1)));
-                } else {
-                    currentIndex = totalReal - 1;
-                    goTo(currentIndex);
-                }
-                return;
-            }
+            if (currentIndex <= 0) return;
             currentIndex--;
             goTo(currentIndex);
         }
 
-        function startAuto() {
-            // clearInterval(autoTimer);
-            // autoTimer = setInterval(next, 3200);
-            // Disabled auto slide based on user request
-        }
-
-        function stopAuto() { clearInterval(autoTimer); }
-
         // Arrow buttons
         const btnPrev = document.getElementById('sliderPrev');
         const btnNext = document.getElementById('sliderNext');
-        if (btnPrev) btnPrev.addEventListener('click', () => { stopAuto(); prev(); startAuto(); });
-        if (btnNext) btnNext.addEventListener('click', () => { stopAuto(); next(); startAuto(); });
+        if (btnPrev) btnPrev.addEventListener('click', () => { prev(); });
+        if (btnNext) btnNext.addEventListener('click', () => { next(); });
 
         // Dot buttons
         dots.forEach((dot, i) => {
-            dot.addEventListener('click', () => { stopAuto(); goTo(i); startAuto(); });
+            dot.addEventListener('click', () => { goTo(i); });
         });
 
         // Mouse drag
@@ -1064,7 +1133,6 @@
             startX = e.clientX;
             startTranslate = currentTranslate;
             track.style.transition = 'none';
-            stopAuto();
         });
         window.addEventListener('mousemove', e => {
             if (!isDragging) return;
@@ -1078,7 +1146,6 @@
             if (diff < -60) next();
             else if (diff > 60) prev();
             else goTo(currentIndex);
-            startAuto();
         });
 
         // Touch drag
@@ -1086,7 +1153,6 @@
             startX = e.touches[0].clientX;
             startTranslate = currentTranslate;
             track.style.transition = 'none';
-            stopAuto();
         }, { passive: true });
         track.addEventListener('touchmove', e => {
             const diff = e.touches[0].clientX - startX;
@@ -1097,14 +1163,10 @@
             if (diff < -50) next();
             else if (diff > 50) prev();
             else goTo(currentIndex);
-            startAuto();
         });
 
-        // Pause on hover
-        track.addEventListener('mouseenter', stopAuto);
-        track.addEventListener('mouseleave', () => {}); // disable auto start
-
         // Init
+        window.addEventListener('resize', () => goTo(currentIndex, false));
         goTo(0, false);
         // startAuto(); // Disable auto slide based on user request
     })();
@@ -1154,9 +1216,18 @@
         }
         
         function closeFaqModal(e) {
-            // Jika dipanggil dari overlay click, pastikan targetnya adalah overlay itu sendiri
             if (e && e.target !== e.currentTarget) return;
             document.getElementById('faqModal').classList.remove('active');
+        }
+
+        function openLaporanModal() {
+            document.getElementById('fabMenu').classList.remove('active');
+            document.getElementById('laporanModal').classList.add('active');
+        }
+
+        function closeLaporanModal(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('laporanModal').classList.remove('active');
         }
         
         function toggleAccordion(btn) {
@@ -1187,6 +1258,46 @@
             if (fabContainer && !fabContainer.contains(e.target)) {
                 document.getElementById('fabMenu').classList.remove('active');
             }
+        });
+
+        // =================== EVENT DETAIL MODAL ===================
+        const _eventsData = JSON.parse(document.getElementById('eventsData').textContent);
+
+        function openEventModal(id) {
+            const ev = _eventsData.find(e => e.id === id);
+            if (!ev) return;
+
+            document.getElementById('edTitle').textContent = ev.title;
+            document.getElementById('edDate').textContent = ev.event_date;
+            document.getElementById('edQuota').textContent = ev.quota - ev.approved + ' sisa / ' + ev.quota;
+            document.getElementById('edOrganizer').textContent = ev.organizer;
+            document.getElementById('edLocation').textContent = ev.location;
+            document.getElementById('edDescription').textContent = ev.description;
+
+            const img = document.getElementById('edPosterImg');
+            const placeholder = document.getElementById('edPosterPlaceholder');
+            if (ev.poster) {
+                img.src = ev.poster;
+                img.style.display = 'block';
+                placeholder.style.display = 'none';
+            } else {
+                img.style.display = 'none';
+                placeholder.style.display = 'flex';
+            }
+
+            document.getElementById('eventDetailModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEventModal(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('eventDetailModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeEventModal();
         });
     </script>
 </body>

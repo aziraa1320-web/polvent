@@ -8,6 +8,7 @@
 
 @push('styles')
 <style>
+    /* ========== WELCOME BANNER ========== */
     .welcome-card {
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #334155 100%);
         border-radius: 1.25rem;
@@ -18,7 +19,6 @@
     }
     .welcome-card::before { content:''; position:absolute; top:-50px; right:-50px; width:200px; height:200px; background:rgba(255,255,255,0.04); border-radius:50%; }
     .welcome-card::after  { content:''; position:absolute; bottom:-70px; right:60px; width:260px; height:260px; background:rgba(255,255,255,0.02); border-radius:50%; }
-
     .welcome-role { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); border-radius:99px; padding:0.3rem 0.75rem; font-size:0.75rem; color:rgba(255,255,255,0.8); font-weight:600; margin-bottom:0.875rem; }
     .welcome-name { color:white; font-size:1.625rem; font-weight:800; margin-bottom:0.2rem; }
     .welcome-sub { color:rgba(255,255,255,0.6); font-size:0.82rem; }
@@ -27,39 +27,72 @@
     .btn-ghost { background:rgba(255,255,255,0.1); color:white; border:1.5px solid rgba(255,255,255,0.2); padding:0.6rem 1.25rem; border-radius:0.625rem; font-weight:600; font-size:0.845rem; display:flex; align-items:center; gap:0.4rem; transition:all 0.2s; }
     .btn-ghost:hover { background:rgba(255,255,255,0.18); }
 
+    /* ========== STAT CARDS ========== */
     .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-bottom:1.75rem; }
-    .stat-modern { background:white; border-radius:1rem; padding:1.5rem; box-shadow:0 1px 4px rgba(0,0,0,0.04); border:1px solid #f1f5f9; display:flex; align-items:center; gap:1.125rem; transition:transform 0.2s, box-shadow 0.2s; }
-    .stat-modern:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.07); }
+    .stat-modern { background:white; border-radius:1rem; padding:1.5rem; box-shadow:0 1px 8px rgba(0,0,0,0.06); border:1px solid #e8edf2; display:flex; align-items:center; gap:1.125rem; transition:transform 0.2s, box-shadow 0.2s; }
+    .stat-modern:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.09); }
     .stat-icon-box { width:52px; height:52px; border-radius:0.875rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .stat-val { font-size:2rem; font-weight:800; color:#0f172a; line-height:1; margin-bottom:0.25rem; }
     .stat-lbl { font-size:0.8rem; color:#64748b; font-weight:500; }
     .stat-trend { font-size:0.72rem; color:#059669; margin-top:0.2rem; font-weight:600; }
 
+    /* ========== MAIN GRID ========== */
     .admin-main-grid { display:grid; grid-template-columns:2fr 1fr; gap:1.5rem; align-items:start; }
-
-    .card-section { background:white; border-radius:1rem; border:1px solid #f1f5f9; box-shadow:0 1px 4px rgba(0,0,0,0.03); overflow:hidden; }
-    .card-section-header { padding:1.25rem 1.5rem; border-bottom:1px solid #f8fafc; display:flex; align-items:center; justify-content:space-between; }
+    .card-section { background:white; border-radius:1rem; border:1px solid #e2e8f0; box-shadow:0 1px 8px rgba(0,0,0,0.05); overflow:hidden; }
+    .card-section-header { padding:1.25rem 1.5rem; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; }
     .card-section-header h3 { font-size:0.975rem; font-weight:700; color:#1e293b; display:flex; align-items:center; gap:0.5rem; }
 
-    /* Shortcut cards */
+    /* ========== SHORTCUT ========== */
     .shortcut-row { display:flex; flex-direction:column; gap:0.75rem; }
-    .shortcut-link { display:flex; align-items:center; gap:0.875rem; padding:1rem 1.125rem; background:#f8fafc; border-radius:0.875rem; text-decoration:none; border:1.5px solid #f1f5f9; transition:all 0.2s; }
+    .shortcut-link { display:flex; align-items:center; gap:0.875rem; padding:1rem 1.125rem; background:#f8fafc; border-radius:0.875rem; text-decoration:none; border:1.5px solid #e8edf2; transition:all 0.2s; }
     .shortcut-link:hover { background:white; border-color:#0f172a; box-shadow:0 4px 12px rgba(0,0,0,0.06); transform:translateX(4px); }
     .shortcut-icon { width:40px; height:40px; border-radius:0.75rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .shortcut-text .title { font-weight:700; font-size:0.875rem; color:#1e293b; }
     .shortcut-text .sub { font-size:0.72rem; color:#94a3b8; margin-top:0.1rem; }
 
-    /* Status card */
-    .status-card { background:white; border-radius:1rem; border:1px solid #f1f5f9; box-shadow:0 1px 4px rgba(0,0,0,0.03); padding:1.375rem; margin-top:1.5rem; }
-    .status-row { display:flex; justify-content:space-between; align-items:center; padding:0.625rem 0; border-bottom:1px solid #f8fafc; font-size:0.845rem; }
-    .status-row:last-child { border-bottom:none; padding-bottom:0; }
-    .status-key { color:#64748b; }
-    .status-val { font-weight:600; color:#1e293b; }
-    .status-val.ok { color:#059669; }
+    /* ========== PANITIA QUICK TABLE ========== */
+    .panitia-item {
+        display: flex;
+        align-items: center;
+        gap: 0.875rem;
+        padding: 0.875rem 1.25rem;
+        border-bottom: 1px solid #f1f5f9;
+        transition: background 0.15s;
+    }
+    .panitia-item:last-child { border-bottom: none; }
+    .panitia-item:hover { background: #f8fafc; }
+    .panitia-avatar {
+        width: 38px; height: 38px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+    .panitia-avatar-placeholder {
+        width: 38px; height: 38px;
+        border-radius: 50%;
+        background: #eff6ff;
+        color: #0056B3;
+        font-weight: 800;
+        font-size: 0.85rem;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+    }
+    .panitia-name { font-weight: 700; font-size: 0.875rem; color: #1e293b; }
+    .panitia-email { font-size: 0.72rem; color: #64748b; margin-top: 0.05rem; }
 
-    @media (max-width: 900px) {
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1024px) {
         .admin-main-grid { grid-template-columns: 1fr; }
-        .stats-row { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+        .stats-row { grid-template-columns: 1fr; gap: 0.875rem; }
+        .welcome-card { padding: 1.5rem; }
+        .welcome-name { font-size: 1.25rem; }
+        .welcome-actions { flex-direction: column; }
+        .welcome-card > div { flex-direction: column; align-items: flex-start !important; }
+    }
+    @media (max-width: 480px) {
+        .stats-row { grid-template-columns: 1fr 1fr; }
     }
 </style>
 @endpush
@@ -74,7 +107,7 @@
             <div class="welcome-name">{{ auth()->user()->name }}</div>
             <div class="welcome-sub">Monitoring seluruh event dan aktivitas di sistem POLVENT</div>
         </div>
-        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;" class="welcome-actions">
             <a href="{{ route('admin.events.create') }}" class="btn-white">
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                 Buat Event
@@ -190,7 +223,8 @@
     </div>
 
     {{-- Sidebar --}}
-    <div>
+    <div style="display:flex; flex-direction:column; gap:1.5rem;">
+
         {{-- Shortcuts --}}
         <div class="card-section">
             <div class="card-section-header">
@@ -221,13 +255,13 @@
                         </div>
                         <svg style="margin-left:auto;color:#cbd5e1;" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </a>
-                    <a href="{{ route('admin.login-history.index') }}" class="shortcut-link">
+                    <a href="{{ route('admin.profile.edit') }}" class="shortcut-link">
                         <div class="shortcut-icon" style="background:#fef3c7;">
-                            <svg width="18" height="18" fill="none" stroke="#d97706" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            <svg width="18" height="18" fill="none" stroke="#d97706" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         </div>
                         <div class="shortcut-text">
-                            <div class="title">Login History</div>
-                            <div class="sub">Log keamanan sistem</div>
+                            <div class="title">Profil Admin</div>
+                            <div class="sub">Pengaturan akun admin</div>
                         </div>
                         <svg style="margin-left:auto;color:#cbd5e1;" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </a>
@@ -235,29 +269,39 @@
             </div>
         </div>
 
-        {{-- System Status --}}
-        <div class="status-card">
-            <h3 style="font-size:0.9rem;font-weight:700;color:#1e293b;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;">
-                <svg style="color:#10b981;" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Status Sistem
-            </h3>
-            <div class="status-row">
-                <span class="status-key">Versi Laravel</span>
-                <span class="status-val">11.x</span>
+        {{-- Panitia Terdaftar Quick View --}}
+        <div class="card-section">
+            <div class="card-section-header">
+                <h3>
+                    <svg width="16" height="16" fill="none" stroke="#0056B3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    Panitia Aktif
+                </h3>
+                <a href="{{ route('admin.panitia.index') }}" class="btn btn-secondary btn-sm">Kelola</a>
             </div>
-            <div class="status-row">
-                <span class="status-key">Database</span>
-                <span class="status-val ok">● Connected</span>
-            </div>
-            <div class="status-row">
-                <span class="status-key">Timezone</span>
-                <span class="status-val">Asia/Jakarta</span>
-            </div>
-            <div class="status-row">
-                <span class="status-key">Server</span>
-                <span class="status-val ok">● Online</span>
-            </div>
+            @php $panitias = \App\Models\User::where('role','panitia')->latest()->take(5)->get(); @endphp
+            @forelse($panitias as $p)
+                <div class="panitia-item">
+                    @if($p->profile_photo)
+                        <img src="{{ $p->profile_photo_url }}" alt="{{ $p->name }}" class="panitia-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="panitia-avatar-placeholder" style="display:none;">{{ strtoupper(substr($p->name,0,1)) }}</div>
+                    @else
+                        <div class="panitia-avatar-placeholder">{{ strtoupper(substr($p->name,0,1)) }}</div>
+                    @endif
+                    <div style="flex:1; min-width:0;">
+                        <div class="panitia-name">{{ $p->name }}</div>
+                        <div class="panitia-email">{{ $p->email }}</div>
+                    </div>
+                    @if($p->is_otp_verified)
+                        <span class="status-badge status-approved">Aktif</span>
+                    @else
+                        <span class="status-badge status-pending">Belum</span>
+                    @endif
+                </div>
+            @empty
+                <div style="padding:1.5rem; text-align:center; color:#94a3b8; font-size:0.85rem;">Belum ada panitia terdaftar</div>
+            @endforelse
         </div>
+
     </div>
 
 </div>

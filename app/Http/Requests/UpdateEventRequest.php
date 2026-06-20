@@ -22,9 +22,28 @@ class UpdateEventRequest extends FormRequest
         return [
             'title'       => ['required', 'string', 'min:5', 'max:255'],
             'description' => ['required', 'string', 'min:20', 'max:5000'],
-            'event_date'  => ['required', 'date'],
+            'event_date'  => [
+                'required', 
+                'date',
+                function ($attribute, $value, $fail) {
+                    $location = $this->input('location');
+                    if ($location) {
+                        $date = \Carbon\Carbon::parse($value)->toDateString();
+                        $eventId = $this->route('event') instanceof \App\Models\Event ? $this->route('event')->id : $this->route('event');
+                        
+                        $exists = \App\Models\Event::where('location', $location)
+                                    ->whereDate('event_date', $date)
+                                    ->where('id', '!=', $eventId)
+                                    ->exists();
+                        if ($exists) {
+                            $fail("Lokasi {$location} sudah penuh (telah dipesan) pada tanggal tersebut.");
+                        }
+                    }
+                }
+            ],
             'quota'       => ['required', 'integer', 'min:1', 'max:10000'],
-            'location'    => ['nullable', 'string', 'max:255'],
+            'location'    => ['nullable', 'string', 'in:Aula Teknik Informatika,Aula Bahasa,Aula ADM'],
+            'organizer'   => ['nullable', 'string', 'max:255'],
             'poster'      => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }

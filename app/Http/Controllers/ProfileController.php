@@ -16,6 +16,12 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        if ($request->user()->isAdmin()) {
+            return view('profile.edit-admin', [
+                'user' => $request->user(),
+            ]);
+        }
+
         if ($request->user()->isPanitia()) {
             return view('profile.edit-panitia', [
                 'user' => $request->user(),
@@ -49,6 +55,10 @@ class ProfileController extends Controller
         }
 
         $user->save();
+
+        if ($user->isAdmin()) {
+            return Redirect::route('admin.profile.edit')->with('success', 'Profil berhasil diperbarui!');
+        }
 
         if ($user->isPanitia()) {
             return Redirect::route('panitia.profile.edit')->with('success', 'Profil berhasil diperbarui!');

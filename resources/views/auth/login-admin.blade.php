@@ -82,7 +82,7 @@
     </div>
 
     <div class="form-group">
-        <label class="form-label" for="password">Security Passphrase</label>
+        <label class="form-label" for="password">Password</label>
         <div class="input-wrap">
             <span class="input-ico">
                 <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,6 +107,9 @@
         <label class="remember-label">
             <input type="checkbox" name="remember" id="remember_me"> Ingat Sesi
         </label>
+        @if (Route::has('password.request'))
+            <a href="{{ route('password.request') }}" style="font-size:0.8rem; color:#1e293b; text-decoration:none; font-weight:600;">Lupa Password?</a>
+        @endif
     </div>
 
     {{-- Google reCAPTCHA v2 --}}

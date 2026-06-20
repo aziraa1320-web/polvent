@@ -107,6 +107,9 @@
         <label class="remember-label">
             <input type="checkbox" name="remember" id="remember_me"> Ingat Sesi
         </label>
+        @if (Route::has('password.request'))
+            <a href="{{ route('password.request') }}" style="font-size:0.8rem; color:#059669; text-decoration:none; font-weight:600;">Lupa Password?</a>
+        @endif
     </div>
 
     {{-- Google reCAPTCHA v2 --}}

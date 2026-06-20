@@ -13,12 +13,12 @@
     {{-- ===== LEFT: Event Info ===== --}}
     <div>
         {{-- Poster / Banner --}}
-        <div style="border-radius:1rem;overflow:hidden;margin-bottom:1.5rem;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+        <div style="border-radius:1rem;overflow:hidden;margin-bottom:1.5rem;box-shadow:0 4px 20px rgba(0,0,0,0.08);background:linear-gradient(135deg,#0056B3,#001f4d);display:flex;align-items:center;justify-content:center;">
             @if($event->poster)
                 <img src="{{ Storage::url($event->poster) }}" alt="{{ $event->title }}"
-                    style="width:100%;max-height:360px;object-fit:cover;">
+                    style="width:100%;max-height:600px;object-fit:contain;background:rgba(0,0,0,0.2);">
             @else
-                <div style="height:220px;background:linear-gradient(135deg,#0056B3,#001f4d);display:flex;align-items:center;justify-content:center;">
+                <div style="height:220px;display:flex;align-items:center;justify-content:center;width:100%;">
                     <span style="font-size:5rem;">🎓</span>
                 </div>
             @endif
@@ -216,12 +216,18 @@
                                 <span style="position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);color:#9ca3af;display:flex;align-items:center;">
                                     <svg style="width:15px;height:15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                 </span>
-                                <input type="number" name="angkatan"
+                                <select name="angkatan"
                                        class="form-input @error('angkatan') is-invalid @enderror"
-                                       style="padding-left:2.2rem;"
-                                       value="{{ old('angkatan', auth()->user()->angkatan) }}"
-                                       placeholder="Contoh: 2023"
-                                       min="2000" max="{{ date('Y') + 1 }}" required>
+                                       style="padding-left:2.2rem; appearance:none; cursor:pointer;" required>
+                                       <option value="">Pilih Angkatan</option>
+                                       @php $currentYear = date('Y'); @endphp
+                                       @for($year = $currentYear + 1; $year >= 2020; $year--)
+                                           <option value="{{ $year }}" {{ old('angkatan', auth()->user()->angkatan) == $year ? 'selected' : '' }}>{{ $year }}</option>
+                                       @endfor
+                                </select>
+                                <span style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);color:#9ca3af;pointer-events:none;">
+                                    <svg style="width:15px;height:15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                </span>
                             </div>
                             @error('angkatan') <div class="form-error">{{ $message }}</div> @enderror
                         </div>

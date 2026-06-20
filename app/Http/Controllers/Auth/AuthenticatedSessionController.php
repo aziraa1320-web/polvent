@@ -60,6 +60,22 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
+        // Jika sudah diverifikasi OTP sebelumnya, langsung login
+        if ($user->is_otp_verified) {
+            Auth::login($user, $request->boolean('remember'));
+            $request->session()->regenerate();
+
+            LoginHistory::create([
+                'user_id'    => $user->id,
+                'email'      => $user->email,
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'status'     => 'success',
+            ]);
+
+            return redirect()->route('dashboard');
+        }
+
         // Cek nomor WA
         if (empty($user->phone)) {
             throw \Illuminate\Validation\ValidationException::withMessages([
@@ -121,6 +137,22 @@ class AuthenticatedSessionController extends Controller
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'email' => 'Akses ditolak. Anda bukan Panitia.',
             ]);
+        }
+
+        // Jika sudah diverifikasi OTP sebelumnya, langsung login
+        if ($user->is_otp_verified) {
+            Auth::login($user, $request->boolean('remember'));
+            $request->session()->regenerate();
+
+            LoginHistory::create([
+                'user_id'    => $user->id,
+                'email'      => $user->email,
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'status'     => 'success',
+            ]);
+
+            return redirect()->route('panitia.dashboard');
         }
 
         // Cek nomor WA

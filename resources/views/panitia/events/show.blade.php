@@ -25,7 +25,9 @@
     <div style="display:flex;flex-direction:column;gap:1.5rem;">
         <div class="form-card">
             @if($event->poster)
-                <img src="{{ Storage::url($event->poster) }}" alt="{{ $event->title }}" style="width:100%;object-fit:cover;border-bottom:1px solid #e5e7eb;">
+                <div style="background:linear-gradient(135deg,#0056B3,#001f4d);display:flex;align-items:center;justify-content:center;border-radius:1rem 1rem 0 0;overflow:hidden;">
+                    <img src="{{ Storage::url($event->poster) }}" alt="{{ $event->title }}" style="width:100%;max-height:600px;object-fit:contain;background:rgba(0,0,0,0.2);">
+                </div>
             @else
                 <div style="height:150px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #e5e7eb;color:#94a3b8;">
                     Tanpa Poster

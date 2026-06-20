@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Mail\PanitiaAccountCreatedMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 
 class PanitiaController extends Controller
@@ -29,19 +32,61 @@ class PanitiaController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        User::create([
+        $panitia = User::create([
             'name'            => $request->name,
             'email'           => $request->email,
             'password'        => Hash::make($request->password),
             'role'            => 'panitia',
-            'is_otp_verified' => true, // Bypass OTP requirement for manually created admins/panitias, or we leave it as false if we want them to verify. Let's make it true so they don't get stuck if emails are fake. Wait, OTP on login is different. OTP on login might happen regardless of is_otp_verified. We'll set it to true.
+            'is_otp_verified' => true,
         ]);
 
+        try {
+            Mail::to($panitia->email)->send(new PanitiaAccountCreatedMail($request->name, $request->email, $request->password));
+        } catch (\Exception $e) {
+            // Log the error but don't stop the creation process
+            \Log::error('Failed to send Panitia account creation email: ' . $e->getMessage());
+            return redirect()->route('admin.panitia.index')
+                ->with('success', 'Akun Panitia berhasil dibuat, namun gagal mengirim email notifikasi. Silakan hubungi Panitia secara manual.');
+        }
+
         return redirect()->route('admin.panitia.index')
-            ->with('success', 'Akun Panitia berhasil dibuat!');
+            ->with('success', 'Akun Panitia berhasil dibuat dan email notifikasi telah dikirim!');
     }
 
-    public function destroy(User $panitium) // Route model binding uses singular of panitia
+    public function edit(User $panitium)
+    {
+        if ($panitium->role !== 'panitia') {
+            abort(403);
+        }
+        return view('admin.panitia.edit', compact('panitium'));
+    }
+
+    public function update(Request $request, User $panitium)
+    {
+        if ($panitium->role !== 'panitia') {
+            abort(403);
+        }
+
+        $request->validate([
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($panitium->id)],
+            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $panitium->name = $request->name;
+        $panitium->email = $request->email;
+
+        if ($request->filled('password')) {
+            $panitium->password = Hash::make($request->password);
+        }
+
+        $panitium->save();
+
+        return redirect()->route('admin.panitia.index')
+            ->with('success', 'Data Panitia berhasil diperbarui!');
+    }
+
+    public function destroy(User $panitium)
     {
         if ($panitium->role !== 'panitia') {
             abort(403);

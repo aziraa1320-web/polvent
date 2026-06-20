@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\LoginHistoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\PanitiaController as AdminPanitiaController;
+use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboardController;
 use App\Http\Controllers\Mahasiswa\EventController as MahasiswaEventController;
 use App\Http\Controllers\Panitia\DashboardController as PanitiaDashboardController;
@@ -24,7 +25,6 @@ Route::get('/', function () {
     $events = \App\Models\Event::upcoming()
         ->withCount('approvedRegistrations')
         ->having(\Illuminate\Support\Facades\DB::raw('quota - approved_registrations_count'), '>', 0)
-        ->limit(6)
         ->get();
 
     $stats  = [
@@ -78,12 +78,22 @@ Route::middleware(['auth', 'checkRole:admin'])
         Route::get('/activity-logs', [ActivityLogController::class, 'index'])
             ->name('activity-logs.index');
 
-        // Login History
-        Route::get('/login-history', [LoginHistoryController::class, 'index'])
-            ->name('login-history.index');
+        // Profile
+        Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
         // Manage Panitia
-        Route::resource('panitia', AdminPanitiaController::class)->except(['show', 'edit', 'update']);
+        Route::resource('panitia', AdminPanitiaController::class)->except(['show']);
+
+        // Manage Registrations (Kelola Peserta)
+        Route::get('/registrations', [AdminRegistrationController::class, 'index'])
+            ->name('registrations.index');
+        Route::patch('/registrations/{registration}/approve', [AdminRegistrationController::class, 'approve'])
+            ->name('registrations.approve');
+        Route::patch('/registrations/{registration}/reject', [AdminRegistrationController::class, 'reject'])
+            ->name('registrations.reject');
+        Route::delete('/registrations/{registration}', [AdminRegistrationController::class, 'destroy'])
+            ->name('registrations.destroy');
     });
 
 /*
