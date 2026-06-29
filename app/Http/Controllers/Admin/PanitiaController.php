@@ -29,15 +29,20 @@ class PanitiaController extends Controller
         $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone'    => ['required', 'string', 'max:20', 'regex:/^(\+62|62|0)[0-9]{8,13}$/'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'phone.required' => 'Nomor WhatsApp wajib diisi agar panitia bisa login via OTP.',
+            'phone.regex'    => 'Format nomor WA tidak valid. Gunakan format 08xxxxxxx atau +628xxxxxxx.',
         ]);
 
         $panitia = User::create([
             'name'            => $request->name,
             'email'           => $request->email,
+            'phone'           => $request->phone,
             'password'        => Hash::make($request->password),
             'role'            => 'panitia',
-            'is_otp_verified' => true,
+            'is_otp_verified' => false,
         ]);
 
         try {
@@ -70,11 +75,15 @@ class PanitiaController extends Controller
         $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($panitium->id)],
+            'phone'    => ['nullable', 'string', 'max:20', 'regex:/^(\+62|62|0)[0-9]{8,13}$/'],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'phone.regex' => 'Format nomor WA tidak valid. Gunakan format 08xxxxxxx atau +628xxxxxxx.',
         ]);
 
-        $panitium->name = $request->name;
+        $panitium->name  = $request->name;
         $panitium->email = $request->email;
+        $panitium->phone = $request->phone;
 
         if ($request->filled('password')) {
             $panitium->password = Hash::make($request->password);
@@ -96,5 +105,25 @@ class PanitiaController extends Controller
 
         return redirect()->route('admin.panitia.index')
             ->with('success', 'Akun Panitia berhasil dihapus.');
+    }
+
+    public function updatePhone(Request $request, User $panitium)
+    {
+        if ($panitium->role !== 'panitia') {
+            abort(403);
+        }
+
+        $request->validate([
+            'phone' => ['required', 'string', 'max:20', 'regex:/^(\+62|62|0)[0-9]{8,13}$/'],
+        ], [
+            'phone.required' => 'Nomor WhatsApp wajib diisi.',
+            'phone.regex'    => 'Format nomor WA tidak valid. Gunakan format 08xxxxxxx atau +628xxxxxxx.',
+        ]);
+
+        $panitium->phone = $request->phone;
+        $panitium->save();
+
+        return redirect()->route('admin.panitia.index')
+            ->with('success', 'Nomor WhatsApp untuk ' . $panitium->name . ' berhasil ditambahkan!');
     }
 }

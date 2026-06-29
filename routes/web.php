@@ -84,6 +84,8 @@ Route::middleware(['auth', 'checkRole:admin'])
 
         // Manage Panitia
         Route::resource('panitia', AdminPanitiaController::class)->except(['show']);
+        Route::patch('/panitia/{panitium}/update-phone', [AdminPanitiaController::class, 'updatePhone'])
+            ->name('panitia.update-phone');
 
         // Manage Registrations (Kelola Peserta)
         Route::get('/registrations', [AdminRegistrationController::class, 'index'])

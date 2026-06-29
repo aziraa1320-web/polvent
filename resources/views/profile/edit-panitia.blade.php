@@ -170,6 +170,20 @@
                     @error('email') <div class="field-error">{{ $message }}</div> @enderror
                 </div>
 
+                <div class="field-group">
+                    <label class="field-label" for="phone">
+                        No. WhatsApp
+                        <span style="font-size:0.75rem;font-weight:500;color:#059669;margin-left:0.4rem;">⚡ Digunakan untuk OTP login</span>
+                    </label>
+                    <input type="text" id="phone" name="phone" value="{{ old('phone', $user->phone) }}"
+                        class="field-input {{ $errors->has('phone') ? 'is-invalid' : '' }}"
+                        placeholder="Contoh: 081234567890">
+                    <div style="font-size:0.75rem;color:#64748b;margin-top:0.35rem;">
+                        Format: 08xxxxxxx atau +628xxxxxxx. Pastikan nomor aktif WhatsApp agar bisa menerima kode OTP.
+                    </div>
+                    @error('phone') <div class="field-error">{{ $message }}</div> @enderror
+                </div>
+
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
                         <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
