@@ -24,6 +24,7 @@
     .form-input:focus { border-color: #0056B3; background: white; box-shadow: 0 0 0 3px rgba(0,86,179,0.09); }
     .form-input.error { border-color: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,0.07); }
     .form-error { color: #dc2626; font-size: 0.76rem; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.3rem; }
+    .form-input[readonly] { background: #f1f5f9; color: #475569; cursor: default; }
 
     /* Two-column grid */
     .form-grid {
@@ -95,6 +96,35 @@
     }
     .pwd-strength-text { font-size: 0.72rem; margin-top: 0.25rem; font-weight: 500; }
 
+    /* NIM lookup status */
+    .nim-status {
+        font-size: 0.76rem; margin-top: 0.25rem;
+        display: flex; align-items: center; gap: 0.3rem;
+    }
+    .nim-status.success { color: #16a34a; }
+    .nim-status.error   { color: #dc2626; }
+    .nim-status.loading { color: #94a3b8; }
+
+    /* NIM verified data card */
+    .nim-data-card {
+        background: #f0fdf4; border: 1px solid #bbf7d0;
+        border-radius: 0.625rem; padding: 0.75rem 0.875rem;
+        margin-bottom: 1rem; display: none;
+    }
+    .nim-data-card.show { display: block; }
+    .nim-data-card .card-title {
+        font-size: 0.78rem; font-weight: 700; color: #15803d;
+        margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;
+    }
+    .nim-data-card .card-title svg { width: 14px; height: 14px; }
+    .nim-data-row {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 0.875rem;
+    }
+    @media (max-width: 480px) { .nim-data-row { grid-template-columns: 1fr; } }
+    .nim-data-item { margin-bottom: 0.3rem; }
+    .nim-data-label { font-size: 0.7rem; color: #6b7280; font-weight: 500; }
+    .nim-data-value { font-size: 0.82rem; color: #1e293b; font-weight: 600; }
+
     @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 
@@ -106,7 +136,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
     </svg>
     <div>
-        Pendaftaran akun khusus untuk <strong>Mahasiswa Polbeng</strong>. Akun Panitia hanya dibuat oleh Admin.
+        Pendaftaran akun khusus untuk <strong>Mahasiswa Polbeng</strong>. Masukkan NIM terlebih dahulu untuk verifikasi data. Akun Panitia hanya dibuat oleh Admin.
     </div>
 </div>
 
@@ -122,56 +152,68 @@
 <form method="POST" action="{{ route('register') }}" id="register-form">
     @csrf
 
-    {{-- Nama Lengkap --}}
+    {{-- NIM --}}
     <div class="form-group">
-        <label class="form-label" for="name">Nama Lengkap</label>
+        <label class="form-label" for="nim">NIM (Nomor Induk Mahasiswa)</label>
         <div class="input-wrap">
             <span class="input-ico">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2"/>
                 </svg>
             </span>
-            <input id="name" class="form-input {{ $errors->has('name') ? 'error' : '' }}"
-                   type="text" name="name" value="{{ old('name') }}"
-                   placeholder="Nama sesuai KTM"
-                   required autofocus autocomplete="name">
+            <input id="nim" class="form-input {{ $errors->has('nim') ? 'error' : '' }}"
+                   type="text" name="nim" value="{{ old('nim') }}"
+                   placeholder="Masukkan NIM Anda" maxlength="20"
+                   required autofocus autocomplete="off">
         </div>
-        @error('name') <div class="form-error">{{ $message }}</div> @enderror
+        <div class="form-hint">Masukkan NIM untuk memverifikasi data Anda</div>
+        <div id="nim-status" class="nim-status" style="display:none;"></div>
+        @error('nim') <div class="form-error">{{ $message }}</div> @enderror
     </div>
 
-    {{-- NIM + Email --}}
-    <div class="form-grid">
-        <div class="form-group">
-            <label class="form-label" for="nim">NIM</label>
-            <div class="input-wrap">
-                <span class="input-ico">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2"/>
-                    </svg>
-                </span>
-                <input id="nim" class="form-input {{ $errors->has('nim') ? 'error' : '' }}"
-                       type="text" name="nim" value="{{ old('nim') }}"
-                       placeholder="5302XXXXXXX" maxlength="20">
-            </div>
-            <div class="form-hint">Nomor Induk Mahasiswa</div>
-            @error('nim') <div class="form-error">{{ $message }}</div> @enderror
+    {{-- Data Mahasiswa (auto-filled, readonly) --}}
+    <div id="nim-data-card" class="nim-data-card">
+        <div class="card-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Data Mahasiswa Terverifikasi
         </div>
+        <div class="nim-data-row">
+            <div class="nim-data-item">
+                <div class="nim-data-label">Nama Lengkap</div>
+                <div class="nim-data-value" id="mhs-nama">-</div>
+            </div>
+            <div class="nim-data-item">
+                <div class="nim-data-label">Angkatan</div>
+                <div class="nim-data-value" id="mhs-angkatan">-</div>
+            </div>
+            <div class="nim-data-item">
+                <div class="nim-data-label">Jurusan</div>
+                <div class="nim-data-value" id="mhs-jurusan">-</div>
+            </div>
+            <div class="nim-data-item">
+                <div class="nim-data-label">Program Studi</div>
+                <div class="nim-data-value" id="mhs-prodi">-</div>
+            </div>
+        </div>
+    </div>
 
-        <div class="form-group">
-            <label class="form-label" for="email">Email</label>
-            <div class="input-wrap">
-                <span class="input-ico">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
-                </span>
-                <input id="email" class="form-input {{ $errors->has('email') ? 'error' : '' }}"
-                       type="email" name="email" value="{{ old('email') }}"
-                       placeholder="nama@gmail.com"
-                       required autocomplete="username">
-            </div>
-            @error('email') <div class="form-error">{{ $message }}</div> @enderror
+    {{-- Email --}}
+    <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <div class="input-wrap">
+            <span class="input-ico">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+            </span>
+            <input id="email" class="form-input {{ $errors->has('email') ? 'error' : '' }}"
+                   type="email" name="email" value="{{ old('email') }}"
+                   placeholder="nama@gmail.com"
+                   required autocomplete="username">
         </div>
+        @error('email') <div class="form-error">{{ $message }}</div> @enderror
     </div>
 
     {{-- Nomor WhatsApp --}}
@@ -262,6 +304,77 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    /* ===== NIM LOOKUP (AJAX) ===== */
+    const nimInput    = document.getElementById('nim');
+    const nimStatus   = document.getElementById('nim-status');
+    const nimDataCard = document.getElementById('nim-data-card');
+    let nimTimeout    = null;
+    let nimVerified   = false;
+
+    nimInput.addEventListener('input', function () {
+        clearTimeout(nimTimeout);
+        nimVerified = false;
+        nimDataCard.classList.remove('show');
+        nimStatus.style.display = 'none';
+
+        const nim = this.value.trim();
+        if (nim.length < 5) return;
+
+        nimTimeout = setTimeout(function () {
+            lookupNim(nim);
+        }, 500);
+    });
+
+    nimInput.addEventListener('blur', function () {
+        const nim = this.value.trim();
+        if (nim.length >= 5 && !nimVerified) {
+            clearTimeout(nimTimeout);
+            lookupNim(nim);
+        }
+    });
+
+    function lookupNim(nim) {
+        nimStatus.style.display = 'flex';
+        nimStatus.className = 'nim-status loading';
+        nimStatus.innerHTML = '<svg style="width:14px;height:14px;animation:spin 1s linear infinite;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Memverifikasi NIM...';
+
+        fetch('{{ route("register.nim-lookup") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ nim: nim }),
+        })
+        .then(function (response) { return response.json().then(function (data) { return { ok: response.ok, data: data }; }); })
+        .then(function (result) {
+            if (result.ok && result.data.found) {
+                nimVerified = true;
+                nimStatus.className = 'nim-status success';
+                nimStatus.innerHTML = '<svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> NIM terverifikasi';
+                nimInput.classList.remove('error');
+
+                // Auto-fill data mahasiswa
+                document.getElementById('mhs-nama').textContent     = result.data.nama;
+                document.getElementById('mhs-jurusan').textContent   = result.data.jurusan;
+                document.getElementById('mhs-prodi').textContent     = result.data.program_studi;
+                document.getElementById('mhs-angkatan').textContent  = result.data.angkatan;
+                nimDataCard.classList.add('show');
+            } else {
+                nimVerified = false;
+                nimStatus.className = 'nim-status error';
+                nimStatus.innerHTML = '<svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> ' + (result.data.message || 'NIM tidak valid.');
+                nimInput.classList.add('error');
+                nimDataCard.classList.remove('show');
+            }
+        })
+        .catch(function () {
+            nimStatus.className = 'nim-status error';
+            nimStatus.innerHTML = 'Gagal memverifikasi NIM. Coba lagi.';
+        });
+    }
+
     /* ===== PASSWORD TOGGLE ===== */
     function setupToggle(btnId, inputId, iconId) {
         const btn   = document.getElementById(btnId);

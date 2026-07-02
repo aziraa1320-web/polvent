@@ -26,6 +26,10 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
+    Route::post('register/nim-lookup', [RegisteredUserController::class, 'nimLookup'])
+        ->middleware('throttle:15,1')
+        ->name('register.nim-lookup');
+
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 

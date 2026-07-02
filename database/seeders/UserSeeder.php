@@ -33,33 +33,42 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        // Mahasiswa 1
+        // Mahasiswa 1 (Menggunakan data asli dari MasterMahasiswaSeeder)
         User::create([
-            'name'              => 'Budi Santoso',
-            'email'             => 'mahasiswa@polbeng.ac.id',
+            'name'              => 'ABDURROZIQ J. HASAN',
+            'email'             => 'abdurroziq@polbeng.ac.id',
             'password'          => Hash::make('password'),
             'role'              => 'mahasiswa',
-            'nim'               => '5304201001',
+            'nim'               => '6404240002',
+            'jurusan'           => 'Teknik Informatika',
+            'program_studi'     => 'D-IV Keamanan Sistem Informasi',
+            'angkatan'          => '2024',
             'email_verified_at' => now(),
         ]);
 
         // Mahasiswa 2
         User::create([
-            'name'              => 'Siti Rahayu',
-            'email'             => 'siti@polbeng.ac.id',
+            'name'              => 'AKBAR MAULANA',
+            'email'             => 'akbar@polbeng.ac.id',
             'password'          => Hash::make('password'),
             'role'              => 'mahasiswa',
-            'nim'               => '5304201002',
+            'nim'               => '6404240019',
+            'jurusan'           => 'Teknik Informatika',
+            'program_studi'     => 'D-IV Keamanan Sistem Informasi',
+            'angkatan'          => '2024',
             'email_verified_at' => now(),
         ]);
 
         // Mahasiswa 3
         User::create([
-            'name'              => 'Ahmad Fauzi',
-            'email'             => 'ahmad@polbeng.ac.id',
+            'name'              => 'ANGGUN MARYYAMAH',
+            'email'             => 'anggun@polbeng.ac.id',
             'password'          => Hash::make('password'),
             'role'              => 'mahasiswa',
-            'nim'               => '5304201003',
+            'nim'               => '6404240023',
+            'jurusan'           => 'Teknik Informatika',
+            'program_studi'     => 'D-IV Keamanan Sistem Informasi',
+            'angkatan'          => '2024',
             'email_verified_at' => now(),
         ]);
     }

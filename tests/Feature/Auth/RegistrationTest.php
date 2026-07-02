@@ -18,19 +18,34 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
+        // Seed data master mahasiswa untuk verifikasi NIM
+        \App\Models\MasterMahasiswa::create([
+            'nim'           => '6404240027',
+            'nama'          => 'ANNISA NUR ROHMADHANI',
+            'jurusan'       => 'Teknik Informatika',
+            'program_studi' => 'D-IV Keamanan Sistem Informasi',
+            'angkatan'      => '2024',
+        ]);
+
         $response = $this->post('/register', [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
+            'nim'                   => '6404240027',
+            'email'                 => 'annisa@example.com',
+            'phone'                 => '081234567890',
+            'password'              => 'password',
             'password_confirmation' => 'password',
-            'g-recaptcha-response' => 'mock-token',
         ]);
 
         $this->assertGuest();
         $response->assertRedirect(route('otp.verify'));
 
-        $user = \App\Models\User::where('email', 'test@example.com')->first();
+        $user = \App\Models\User::where('email', 'annisa@example.com')->first();
         $this->assertNotNull($user);
+        $this->assertEquals('6404240027', $user->nim);
+        $this->assertEquals('ANNISA NUR ROHMADHANI', $user->name);
+        $this->assertEquals('Teknik Informatika', $user->jurusan);
+        $this->assertEquals('D-IV Keamanan Sistem Informasi', $user->program_studi);
+        $this->assertEquals('2024', $user->angkatan);
+        $this->assertEquals('mahasiswa', $user->role);
         $this->assertFalse($user->is_otp_verified);
         $this->assertNotNull($user->otp_code);
 
